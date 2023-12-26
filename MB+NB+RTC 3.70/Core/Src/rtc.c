@@ -37,11 +37,11 @@ HAL_StatusTypeDef RTC_Set_Time(uint16_t hour,uint16_t min,uint16_t sec,uint16_t 
 	return HAL_RTC_SetTime(&hrtc,&GET_Time,RTC_FORMAT_BCD);	
 }
 
-//RTC鏃ユ湡璁剧疆
-//year,month,date:骞?(0~99),鏈?(1~12),鏃?(0~31)
-//week:鏄熸湡(1~7,0,闈炴硶!)
-//杩斿洖鍊?:SUCEE(1),鎴愬姛
-//       ERROR(0),杩涘叆鍒濆鍖栨ā寮忓け璐? 
+//RTC日期设置
+//year,month,date:年(0~99),月(1~12),日(0~31)
+//week:星期(1~7,0,非法!)
+//返回值:SUCEE(1),成功
+//       ERROR(0),进入初始化模式失败 
 HAL_StatusTypeDef RTC_Set_Date(uint16_t year,uint16_t month,uint16_t date,uint16_t week)
 {
 	RTC_DateTypeDef GET_Date;
@@ -61,8 +61,8 @@ void MX_RTC_Init(void)
 {
 
   /* USER CODE BEGIN RTC_Init 0 */
-	__HAL_RCC_PWR_CLK_ENABLE();//浣胯兘鐢垫簮鏃堕挓PWR
-	HAL_PWR_EnableBkUpAccess();//鍙栨秷澶囦唤鍖哄煙鍐欎繚鎶?
+	__HAL_RCC_PWR_CLK_ENABLE();//使能电源时钟PWR
+	HAL_PWR_EnableBkUpAccess();//取消备份区域写保护
 	HAL_PWR_DisableBkUpAccess();
   /* USER CODE END RTC_Init 0 */
 
@@ -89,39 +89,39 @@ void MX_RTC_Init(void)
   }
 
   /* USER CODE BEGIN Check_RTC_BKUP */
-  //灏哛TC鏃堕棿鏁版嵁淇濆瓨鍦ㄥ浠藉尯
+  //将RTC时间数据保存在备份区
 	if(HAL_RTCEx_BKUPRead(&hrtc,RTC_BKP_DR0)!=0X5051)
-	//鏄惁绗竴娆￠厤缃?
+	//是否第一次配置
 	{ 
 	 RTC_Set_Time(0x15,0x20,0x40,RTC_HOURFORMAT_24); 
-	//璁剧疆鏃堕棿 ,鏍规嵁瀹為檯鏃堕棿淇敼
-	RTC_Set_Date(0x23,0x7,0x20,0x04); //璁剧疆鏃ユ湡
+	//设置时间 ,根据实际时间修改
+	RTC_Set_Date(0x23,0x7,0x20,0x04); //设置日期
 	 HAL_RTCEx_BKUPWrite(&hrtc,RTC_BKP_DR0,0X5051);
-	//鏍囪宸茬粡鍒濆鍖栬繃浜?
+	//标记已经初始化过了
 	 }
-	//鍚屾椂璁板緱娉ㄩ噴涓嬮潰鐨凾IME 鍜孌ATE鍒濆鍖栧嚱鏁版墠琛?
+	//同时记得注释下面的TIME 和DATE初始化函数才行
   /* USER CODE END Check_RTC_BKUP */
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 0;
-  sTime.Minutes = 0;
-  sTime.Seconds = 0;
-  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sDate.WeekDay = RTC_WEEKDAY_THURSDAY;
-  sDate.Month = RTC_MONTH_JULY;
-  sDate.Date = 19;
-  sDate.Year = 23;
+//  sTime.Hours = 0;
+//  sTime.Minutes = 0;
+//  sTime.Seconds = 0;
+//  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+//  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+//  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  sDate.WeekDay = RTC_WEEKDAY_THURSDAY;
+//  sDate.Month = RTC_MONTH_JULY;
+//  sDate.Date = 19;
+//  sDate.Year = 23;
 
-  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
-  {
-    Error_Handler();
-  }
+//  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
 
   /** Enable the Alarm A
   */
@@ -143,12 +143,12 @@ void MX_RTC_Init(void)
 
   /** Enable the WakeUp
   */
-  if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 60, RTC_WAKEUPCLOCK_CK_SPRE_16BITS) != HAL_OK)
-  {
-    Error_Handler();
-  }
+//  if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 60, RTC_WAKEUPCLOCK_CK_SPRE_16BITS) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
   /* USER CODE BEGIN RTC_Init 2 */
-  //璁剧疆鏄寜绉掑敜閱掓槸鎸夊皬鏃跺敜閱掓槸瀵?133琛屼唬鐮佽繘琛岃缃紒锛侊紒
+  //设置是按秒唤醒是按小时唤醒是对133行代码进行设置！！！
 	sAlarm.AlarmMask = RTC_ALARMMASK_DATEWEEKDAY|RTC_ALARMMASK_HOURS;
 	HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BIN);
   /* USER CODE END RTC_Init 2 */
@@ -210,29 +210,29 @@ void HAL_RTC_MspDeInit(RTC_HandleTypeDef* rtcHandle)
 
 /* USER CODE BEGIN 1 */
 
-  //1锛氬畾鏃惰繘鍏ュ緟鏈烘ā寮?
-  //2锛氬畾鏃堕椆閽熷敜閱?
+  //1：定时进入待机模式
+  //2：定时闹钟唤醒
   void START_STANDBY(void)
   {
 	 int iwdg_flag;
 	 W25QXX_Read((uint8_t*)&iwdg_flag,IWDG_ADDR, sizeof(int));
-	 if(iwdg_flag!=0)//姝ｅ父杩愯涓?涓懆鏈?
+	 if(iwdg_flag!=0)//正常运行一个周期
 	 {	
 		iwdg_flag=0;
-		W25QXX_Write((uint8_t*)&iwdg_flag,IWDG_ADDR, sizeof(int));//鏍囧織浣嶇疆0
-		HAL_NVIC_SystemReset();//绯荤粺澶嶄綅
+		W25QXX_Write((uint8_t*)&iwdg_flag,IWDG_ADDR, sizeof(int));//标志位置0
+		HAL_NVIC_SystemReset();//系统复位
 	 }
 	printf("Executing standby \r\n");
-	GPIO_AnalogState_Config(); //璁剧疆IO鍙ｄ负妯℃嫙杈撳叆鐘舵??
+	GPIO_AnalogState_Config(); //设置IO口为模拟输入状态
 	__HAL_RCC_PWR_CLK_ENABLE();
-	HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);//鍚敤杩炴帴鍒癙A.00鐨刉akeUp Pin
-	__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);  // 娓呴櫎鍞ら啋鏍囪
-	HAL_PWR_EnterSTANDBYMode();    //杩涘叆standby妯″紡 
-	printf("杩涘叆寰呮満妯″紡澶辫触\r\n");
+	HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);//启用连接到PA.00的WakeUp Pin
+	__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);  // 清除唤醒标记
+	HAL_PWR_EnterSTANDBYMode();    //进入standby模式 
+	printf("进入待机模式失败\r\n");
 
   }
   
-  //璁剧疆IO鍙ｄ负妯℃嫙杈撳叆鐘舵?佺殑鍑芥暟锛岃繖涓嚱鏁颁富瑕佹槸涓轰簡鍦ㄤ綆鍔熻?楃姸鎬佷笅锛屽敖閲忔帶鍒禝O涓婁笉蹇呰鐨勬紡鐢垫祦浜х敓銆?
+  //设置IO口为模拟输入状态的函数，这个函数主要是为了在低功耗状态下，尽量控制IO上不必要的漏电流产生。
 void GPIO_AnalogState_Config(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct;

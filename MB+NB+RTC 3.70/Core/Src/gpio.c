@@ -109,9 +109,11 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(BLE_DEBUG_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PC13 PC0 PC2 PC3
-                           PC4 PC8 PC10 PC11 */
+                           PC4 PC8 PC9 PC10
+                           PC11 */
   GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_0|GPIO_PIN_2|GPIO_PIN_3
-                          |GPIO_PIN_4|GPIO_PIN_8|GPIO_PIN_10|GPIO_PIN_11;
+                          |GPIO_PIN_4|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10
+                          |GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
@@ -136,9 +138,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(SENS1_PWR_EN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PA1 PA4 PA5 PA7
-                           PA15 */
+                           PA8 PA15 */
   GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7
-                          |GPIO_PIN_15;
+                          |GPIO_PIN_8|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -229,62 +231,62 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
-//纭欢娴嬭瘯
+//硬件测试
 void DEVICE_Init(void )
 {
-  //浼犳劅鍣?1銆?2锛屾柇鐢?
-	W25QXX_Init();//W25Q128鍒濆鍖?
+  //传感器1、2，断电
+	W25QXX_Init();//W25Q128初始化
 	 MX_USART3_UART_Init();  
 	 MX_UART5_Init();
 	 
 	int iwdg_flag=1;
 //	W25QXX_Write((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
-	HAL_GPIO_WritePin(GPIOC, SENS1_PWR_EN_Pin, GPIO_PIN_RESET);//浼犳劅鍣?1渚涚數
-    HAL_GPIO_WritePin(GPIOA, SEN2_PWR_EN_Pin, GPIO_PIN_RESET);//浼犳劅鍣?2渚涚數
+	HAL_GPIO_WritePin(GPIOC, SENS1_PWR_EN_Pin, GPIO_PIN_RESET);//传感器1供电
+    HAL_GPIO_WritePin(GPIOA, SEN2_PWR_EN_Pin, GPIO_PIN_RESET);//传感器2供电
 	
 	
-	//璁惧渚涚數鐘舵?丩ED
+	//设备供电状态LED
 	HAL_GPIO_WritePin(PWR_LED_GPIO_Port, PWR_LED_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOB, ALM_LED_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, GPIO_PIN_SET);
-	//ADC閲囬泦渚涚數寮?
+	//ADC采集供电开
 	HAL_GPIO_WritePin (GPIOD,GET_PWR_Pin,GPIO_PIN_SET);
-	//钃濈墮渚涚數鍏?
+	//蓝牙供电关
 	HAL_GPIO_WritePin(GPIOD, BLE_PWR_EN_Pin, GPIO_PIN_RESET);
 	//  HAL_GPIO_WritePin(GPIOA,ALM_LED_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE,PWR_FLASH_Pin, GPIO_PIN_SET);
 	//  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_12, GPIO_PIN_SET);
-	//璇诲彇璁惧閰嶇疆淇℃伅
+	//读取设备配置信息
 	 
 	  W25QXX_Read((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
 	  if(iwdg_flag!=0)
 	  {
-	  printf("寮?鍚湅闂ㄧ嫍\r\n");
+	  printf("开启看门狗\r\n");
 	  MX_IWDG_Init();
 	  }
 	  if(iwdg_flag==0)
 	  {
-		printf("澶嶄綅鍏抽棴寮?闂ㄧ嫍\r\n");
+		printf("复位关闭开门狗\r\n");
 		iwdg_flag=1;
 		W25QXX_Write((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
 		printf("Executing standby \r\n");
-		GPIO_AnalogState_Config(); //璁剧疆IO鍙ｄ负妯℃嫙杈撳叆鐘舵??
+		GPIO_AnalogState_Config(); //设置IO口为模拟输入状态
 		__HAL_RCC_PWR_CLK_ENABLE();
-		HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);//鍚敤杩炴帴鍒癙A.00鐨刉akeUp Pin
-		__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);  // 娓呴櫎鍞ら啋鏍囪
-		HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);//鍚敤杩炴帴鍒癙A.00鐨刉akeUp Pin
-		HAL_PWR_EnterSTANDBYMode();    //杩涘叆standby妯″紡 
-		printf("杩涘叆寰呮満妯″紡澶辫触\r\n");
+		HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);//启用连接到PA.00的WakeUp Pin
+		__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);  // 清除唤醒标记
+		HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);//启用连接到PA.00的WakeUp Pin
+		HAL_PWR_EnterSTANDBYMode();    //进入standby模式 
+		printf("进入待机模式失败\r\n");
 	  }
 //	  int loops=0;
 //	 while(loops<=5)
 //	{
 //		if(ADXL345_Init()==0)
 //		{
-//		printf("ADXL345鍒濆鍖栨垚鍔焅r\n");	
+//		printf("ADXL345初始化成功\r\n");	
 //		break;
 //		}
-//		printf("ADXL345鍒濆鍖栧け璐?,姝ｅ湪閲嶆柊鍒濆鍖朶r\n");	
+//		printf("ADXL345初始化失败,正在重新初始化\r\n");	
 //		loops++;
 //		osDelay(200);
 //		
@@ -293,28 +295,28 @@ void DEVICE_Init(void )
 
 int Tilt_check(void)
 {
-	//閲囬泦鍔犻?熷害鏁版嵁
+	//采集加速度数据
 	 osDelay(1000);
 	short x,y,z;
 	int xang,yang,zang;	
-	ADXL345_Read_Average(&x,&y,&z,3);  //璇诲彇x,y,z 3涓柟鍚戠殑鍔犻?熷害鍊? 鎬诲叡10娆?	
-//	printf("X杞村姞閫熷害:%d,Y杞村姞閫熷害:%d,Z杞村姞閫熷害:%d\r\n",x,y,z);	 
-	//閲囬泦鍊炬枩瑙掓暟鎹? 
+	ADXL345_Read_Average(&x,&y,&z,3);  //读取x,y,z 3个方向的加速度值 总共10次	
+//	printf("X轴加速度:%d,Y轴加速度:%d,Z轴加速度:%d\r\n",x,y,z);	 
+	//采集倾斜角数据 
 	xang=abs(ADXL345_Get_Angle(x,y,z,1));
 	yang=abs(ADXL345_Get_Angle(x,y,z,2));
 	zang=abs(ADXL345_Get_Angle(x,y,z,0));  
-//	printf("X杞村?炬枩瑙?:%d,Y杞村?炬枩瑙?:%d,Z杞村?炬枩瑙?:%d\r\n",xang,yang,zang);
+//	printf("X轴倾斜角:%d,Y轴倾斜角:%d,Z轴倾斜角:%d\r\n",xang,yang,zang);
 	
 	if(xang>30||yang>30||zang>30)
 	{
-		printf("璁惧鍊炬枩瑙掑害杩囧ぇ,瑙﹀彂鎶ヨ\r\n");
+		printf("设备倾斜角度过大,触发报警\r\n");
 		HAL_GPIO_WritePin(GPIOB, ALM_LED_Pin, GPIO_PIN_RESET);
 	}
 	else
 	{
 		HAL_GPIO_WritePin(GPIOB, ALM_LED_Pin, GPIO_PIN_SET);
 	}
-//	//鍔犻?熷害鑷姩鏍″噯	
+//	//加速度自动校准	
 //	ADXL345_AUTO_Adjust((char*)&x,(char*)&y,(char*)&z);
 	return 0;
 }
