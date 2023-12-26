@@ -231,62 +231,62 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
-//Ó²¼þ²âÊÔ
+//ç¡¬ä»¶æµ‹è¯•
 void DEVICE_Init(void )
 {
-  //´«¸ÐÆ÷1¡¢2£¬¶Ïµç
-	W25QXX_Init();//W25Q128³õÊ¼»¯
+  //ä¼ æ„Ÿå™¨1ã€2ï¼Œæ–­ç”µ
+	W25QXX_Init();//W25Q128åˆå§‹åŒ–
 	 MX_USART3_UART_Init();  
 	 MX_UART5_Init();
 	 
 	int iwdg_flag=1;
 //	W25QXX_Write((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
-	HAL_GPIO_WritePin(GPIOC, SENS1_PWR_EN_Pin, GPIO_PIN_RESET);//´«¸ÐÆ÷1¹©µç
-    HAL_GPIO_WritePin(GPIOA, SEN2_PWR_EN_Pin, GPIO_PIN_RESET);//´«¸ÐÆ÷2¹©µç
+	HAL_GPIO_WritePin(GPIOC, SENS1_PWR_EN_Pin, GPIO_PIN_RESET);//ä¼ æ„Ÿå™¨1ä¾›ç”µ
+    HAL_GPIO_WritePin(GPIOA, SEN2_PWR_EN_Pin, GPIO_PIN_RESET);//ä¼ æ„Ÿå™¨2ä¾›ç”µ
 	
 	
-	//Éè±¸¹©µç×´Ì¬LED
+	//è®¾å¤‡ä¾›ç”µçŠ¶æ€LED
 	HAL_GPIO_WritePin(PWR_LED_GPIO_Port, PWR_LED_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOB, ALM_LED_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, GPIO_PIN_SET);
-	//ADC²É¼¯¹©µç¿ª
+	//ADCé‡‡é›†ä¾›ç”µå¼€
 	HAL_GPIO_WritePin (GPIOD,GET_PWR_Pin,GPIO_PIN_SET);
-	//À¶ÑÀ¹©µç¹Ø
+	//è“ç‰™ä¾›ç”µå…³
 	HAL_GPIO_WritePin(GPIOD, BLE_PWR_EN_Pin, GPIO_PIN_RESET);
 	//  HAL_GPIO_WritePin(GPIOA,ALM_LED_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE,PWR_FLASH_Pin, GPIO_PIN_SET);
 	//  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_12, GPIO_PIN_SET);
-	//¶ÁÈ¡Éè±¸ÅäÖÃÐÅÏ¢
+	//è¯»å–è®¾å¤‡é…ç½®ä¿¡æ¯
 	 
 	  W25QXX_Read((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
 	  if(iwdg_flag!=0)
 	  {
-	  printf("¿ªÆô¿´ÃÅ¹·\r\n");
+	  printf("å¼€å¯çœ‹é—¨ç‹—\r\n");
 	  MX_IWDG_Init();
 	  }
 	  if(iwdg_flag==0)
 	  {
-		printf("¸´Î»¹Ø±Õ¿ªÃÅ¹·\r\n");
+		printf("å¤ä½å…³é—­å¼€é—¨ç‹—\r\n");
 		iwdg_flag=1;
 		W25QXX_Write((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
 		printf("Executing standby \r\n");
-		GPIO_AnalogState_Config(); //ÉèÖÃIO¿ÚÎªÄ£ÄâÊäÈë×´Ì¬
+		GPIO_AnalogState_Config(); //è®¾ç½®IOå£ä¸ºæ¨¡æ‹Ÿè¾“å…¥çŠ¶æ€
 		__HAL_RCC_PWR_CLK_ENABLE();
-		HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);//ÆôÓÃÁ¬½Óµ½PA.00µÄWakeUp Pin
-		__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);  // Çå³ý»½ÐÑ±ê¼Ç
-		HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);//ÆôÓÃÁ¬½Óµ½PA.00µÄWakeUp Pin
-		HAL_PWR_EnterSTANDBYMode();    //½øÈëstandbyÄ£Ê½ 
-		printf("½øÈë´ý»úÄ£Ê½Ê§°Ü\r\n");
+		HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);//å¯ç”¨è¿žæŽ¥åˆ°PA.00çš„WakeUp Pin
+		__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);  // æ¸…é™¤å”¤é†’æ ‡è®°
+		HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);//å¯ç”¨è¿žæŽ¥åˆ°PA.00çš„WakeUp Pin
+		HAL_PWR_EnterSTANDBYMode();    //è¿›å…¥standbyæ¨¡å¼ 
+		printf("è¿›å…¥å¾…æœºæ¨¡å¼å¤±è´¥\r\n");
 	  }
 //	  int loops=0;
 //	 while(loops<=5)
 //	{
 //		if(ADXL345_Init()==0)
 //		{
-//		printf("ADXL345³õÊ¼»¯³É¹¦\r\n");	
+//		printf("ADXL345åˆå§‹åŒ–æˆåŠŸ\r\n");	
 //		break;
 //		}
-//		printf("ADXL345³õÊ¼»¯Ê§°Ü,ÕýÔÚÖØÐÂ³õÊ¼»¯\r\n");	
+//		printf("ADXL345åˆå§‹åŒ–å¤±è´¥,æ­£åœ¨é‡æ–°åˆå§‹åŒ–\r\n");	
 //		loops++;
 //		osDelay(200);
 //		
@@ -295,28 +295,28 @@ void DEVICE_Init(void )
 
 int Tilt_check(void)
 {
-	//²É¼¯¼ÓËÙ¶ÈÊý¾Ý
+	//é‡‡é›†åŠ é€Ÿåº¦æ•°æ®
 	 osDelay(1000);
 	short x,y,z;
 	int xang,yang,zang;	
-	ADXL345_Read_Average(&x,&y,&z,3);  //¶ÁÈ¡x,y,z 3¸ö·½ÏòµÄ¼ÓËÙ¶ÈÖµ ×Ü¹²10´Î	
-//	printf("XÖá¼ÓËÙ¶È:%d,YÖá¼ÓËÙ¶È:%d,ZÖá¼ÓËÙ¶È:%d\r\n",x,y,z);	 
-	//²É¼¯ÇãÐ±½ÇÊý¾Ý 
+	ADXL345_Read_Average(&x,&y,&z,3);  //è¯»å–x,y,z 3ä¸ªæ–¹å‘çš„åŠ é€Ÿåº¦å€¼ æ€»å…±10æ¬¡	
+//	printf("Xè½´åŠ é€Ÿåº¦:%d,Yè½´åŠ é€Ÿåº¦:%d,Zè½´åŠ é€Ÿåº¦:%d\r\n",x,y,z);	 
+	//é‡‡é›†å€¾æ–œè§’æ•°æ® 
 	xang=abs(ADXL345_Get_Angle(x,y,z,1));
 	yang=abs(ADXL345_Get_Angle(x,y,z,2));
 	zang=abs(ADXL345_Get_Angle(x,y,z,0));  
-//	printf("XÖáÇãÐ±½Ç:%d,YÖáÇãÐ±½Ç:%d,ZÖáÇãÐ±½Ç:%d\r\n",xang,yang,zang);
+//	printf("Xè½´å€¾æ–œè§’:%d,Yè½´å€¾æ–œè§’:%d,Zè½´å€¾æ–œè§’:%d\r\n",xang,yang,zang);
 	
 	if(xang>30||yang>30||zang>30)
 	{
-		printf("Éè±¸ÇãÐ±½Ç¶È¹ý´ó,´¥·¢±¨¾¯\r\n");
+		printf("è®¾å¤‡å€¾æ–œè§’åº¦è¿‡å¤§,è§¦å‘æŠ¥è­¦\r\n");
 		HAL_GPIO_WritePin(GPIOB, ALM_LED_Pin, GPIO_PIN_RESET);
 	}
 	else
 	{
 		HAL_GPIO_WritePin(GPIOB, ALM_LED_Pin, GPIO_PIN_SET);
 	}
-//	//¼ÓËÙ¶È×Ô¶¯Ð£×¼	
+//	//åŠ é€Ÿåº¦è‡ªåŠ¨æ ¡å‡†	
 //	ADXL345_AUTO_Adjust((char*)&x,(char*)&y,(char*)&z);
 	return 0;
 }
