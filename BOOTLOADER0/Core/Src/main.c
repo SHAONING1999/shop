@@ -31,6 +31,7 @@
 #include "delay.h"
 #include "w25qxx.h"
 #include "spi.h"
+#include "sys.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,6 +52,12 @@ iapfun jump2app;
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
+void iap_interface_load_app(uint32_t appxaddr)
+{
+	jump2app=(iapfun)*(uint32_t*)(appxaddr+4);		//拷贝APP程序的复位中断函数地址
+	MSR_MSP(*(uint32_t*)appxaddr);					//初始化APP堆栈指针,对APP程序的堆栈进行重构,就是说重新分配RAM
+	jump2app();									//执行APP的复位中断函数,最终便会跳转到APP的main函数
+}
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -90,11 +97,9 @@ int main(void)
   MX_SPI1_Init();
   W25QXX_Init();//W25Q128初始化
   MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
   MX_DMA_Init();
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
-  HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);  //开启DMA接收
-  __HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
-  HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -114,15 +119,18 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-
-  MX_USART2_UART_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
-
-	printf("bootloader\r\n");
-	jump2app=(iapfun)*(unsigned int *)(ApplicationAddress+4);	
-	__set_MSP(*(unsigned int *)ApplicationAddress); //将复位地址转换成函数指针。
-	jump2app();	
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
+  HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);  //开启DMA接收
+  __HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
+  HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
+	  
+	//关所有中断
+    iap_interface_close_all_interrupt();
+	  
+    printf("bootloader跳转APP\r\n");
+	iap_interface_load_app(0x8040000);
   /* USER CODE END 2 */
 
   /* Infinite loop */

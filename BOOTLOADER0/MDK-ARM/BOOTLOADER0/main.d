@@ -43,3 +43,4 @@ bootloader0\main.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
 bootloader0\main.o: ../Core/Inc/gpio.h
 bootloader0\main.o: ../Core/Inc/delay.h
 bootloader0\main.o: ../Core/Inc/w25qxx.h
+bootloader0\main.o: ../Core/Inc/sys.h

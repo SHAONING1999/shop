@@ -1,4 +1,8 @@
 #include "sys.h"
+#include "usart.h"
+#include "stm32f4xx_hal.h"
+#include "dma.h"
+#include "spi.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F407开发板
@@ -88,6 +92,21 @@ void assert_failed(uint8_t* file, uint32_t line)
 }
 #endif
 
+
+void iap_interface_close_all_interrupt(void)
+{
+	SysTick->CTRL=0;
+	SysTick->VAL=0x00;
+	HAL_NVIC_DisableIRQ(USART1_IRQn);
+	HAL_NVIC_DisableIRQ(USART2_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream5_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream6_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream2_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream7_IRQn);
+	
+	HAL_SPI_MspDeInit(&hspi1);
+	
+}
 //THUMB指令不支持汇编内联
 //采用如下方法实现执行汇编指令WFI  
 __asm void WFI_SET(void)
