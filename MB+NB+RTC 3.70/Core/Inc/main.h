@@ -43,6 +43,8 @@ typedef struct
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 	extern flag_bit flag;
+	extern float VERSION;//»Ìº˛∞Ê±æ
+	#define _VERSION_  3.70
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -72,12 +74,30 @@ struct senser
 	long long Divisorlonglong[10];//Âõ†Â≠êÊï∞ÊçÆ1ong longÁ±ªÂûã
 };
 
+typedef struct {
+    int STIME;
+    int RTIME;
+    float VALUE;
+    char IP[25];
+    int PORT;
+    float LONGITUDE;
+    float LATITUDE;
+    char MN[20];
+    int BOAUD1, BOAUD2;
+	float Volt;
+    int COMMOD, SENSORNUM, AGPS, STATE;
+	char card_4g[20];
+	char card_nb[20];
+	float version;
+} Config;
+
 extern struct senser  senser1; 
 extern struct senser  rsenser1; 
 extern struct senser  senser2; 
 extern struct senser  rsenser2; 
 extern uint8_t BLE_Flag ;
 extern int rwork_state ;
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -101,6 +121,9 @@ void Sensor1_Date_Prase(struct senser* seb,uint8_t* buff,int t);
 void Sensor2_Date_Prase(struct senser* seb,uint8_t* buff,int t);
 void Sensor1_Date_Add(struct senser* seb,char* sendbuff);
 void Sensor2_Date_Add(struct senser* seb,char* sendbuff);
+
+Config parseConfig(const char* input);
+int seekConfig(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

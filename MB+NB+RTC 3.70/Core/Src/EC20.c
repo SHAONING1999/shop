@@ -348,11 +348,9 @@ int Test_4G_STA_TCP(char* msg )
 	send_buf=pvPortMalloc(96);
 	char* p2;
 	W25QXX_Read( (uint8_t*)buff,IP_ADDR,40);//获取IP地址
-	p2=strtok(buff,";");//字符分割
-	sprintf(ipbuff,"%s",p2);//IP填充
-	p2=strtok(NULL,";");
-	sprintf(portbuff,"%s",p2);//端口号填充
-	sprintf((char*)send_buf,"AT+QIOPEN=1,0,\"TCP\",\"%s\",%s,0,1\r\n",buff,portbuff);//进行TCP连接，0，1（设置为缓存模式）
+	int port;
+	W25QXX_Read((uint8_t*)&port,PORT_ADDR,sizeof(int));
+	sprintf((char*)send_buf,"AT+QIOPEN=1,0,\"TCP\",\"%s\",%d,0,1\r\n",buff,port);//进行TCP连接，0，1（设置为缓存模式）
 	EC20_send_cmd_LOOP(send_buf, "OK",10,3,1,"EC20:TCP网络端口打开失败");
 	osDelay(1000);
 	//+QISTATE: 0,"TCP","171.34.196.54",26000,0,1,1,0,1,"uart1"
@@ -454,7 +452,7 @@ int32_t TCP_Sent_Date_4G(char* msg)
 			return 1;//返回1
 			}
 			osDelay(1000);
-			if(loop++>=5)//等待10秒还没接收到应答
+			if(loop++>=7)//等待10秒还没接收到应答
 			{
 				printf("EC20:未收到服务器应答,TCP数据发送失败,备份数据\r\n");
 				W25QXX_Read( (uint8_t*)&reissue_page_4g,REISSUE_PAG_ADDR,sizeof(int));//读取之前缓存的页数

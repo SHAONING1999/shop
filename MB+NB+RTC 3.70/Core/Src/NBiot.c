@@ -152,7 +152,7 @@ uint8_t BC260Y_send_cmd(char *cmd,char *ack,uint16_t waittime)
 	{
 		while(--waittime)	         //等待倒计时
 		{
-			osDelay(50);
+			osDelay(100);
 			if(BC260_rec_flag==1)//如果接收到了应答
 			{
 				if(BC260Y_check_cmd(ack))//接收到期待的应答结果
@@ -391,11 +391,9 @@ int Test_NB_STA_TCP(char* msg)
 	osDelay(1000);
 	char* p2;
 	W25QXX_Read( (uint8_t*)buff,IP_ADDR,40);//获取IP
-	p2=strtok(buff,";");//字符分割
-	sprintf(ipbuff,"%s",p2);//IP填充
-	p2=strtok(NULL,";");
-	sprintf(portbuff,"%s",p2);//端口号填充
-	sprintf((char*)send_buf,"AT+QIOPEN=0,0,\"TCP\",\"%s\",%s\r\n",buff,portbuff);//进行TCP连接
+	int port;
+	W25QXX_Read((uint8_t*)&port,PORT_ADDR,sizeof(int));
+	sprintf((char*)send_buf,"AT+QIOPEN=0,0,\"TCP\",\"%s\",%d\r\n",buff,port);//进行TCP连接
 	BC260_send_cmd_LOOP(send_buf,"OK",10,5,1,"BC260:TCP网络端口打开失败,即将重启");
 	osDelay(1000);
 	if(BC260_send_cmd_LOOP("AT+QISTATE=1,0\r\n","0,2,0",100,5,1,"BC260:TCP网络端口查询连接失败,即将重启"))
@@ -447,16 +445,16 @@ int32_t TCP_Sent_Date_NB(char* msg)
 		osDelay(500);
 		if(BC260_send_cmd_LOOP(msg, "SEND OK",10,5,1,"BC260:TCP数据发送失败 "))
 		{
-		printf("BC260:TCP数据发送失败,备份数据\r\n");
-		W25QXX_Read( (uint8_t*)&nb_reissue_page,REISSUE_PAG_ADDR,sizeof(int));//读取之前缓存的页数
-		strncpy(nb_reissue_buff, msg, sizeof(nb_reissue_buff) - 1);	//把数据copy到缓存数组中
-		W25QXX_Write( (uint8_t*)nb_reissue_buff,REISSUE_MESSAGE_ADDR+nb_reissue_page*500,500);//进行数据备份
-		nb_reissue_page++;
-		W25QXX_Write( (uint8_t*)&nb_reissue_page,REISSUE_PAG_ADDR,sizeof(int));//更新缓存页数
-		clear_BUF(rx2_buffer);
-		vPortFree(q);
-		q = NULL;
-		return 0;//直接返回，后面的查询不用进行了。防止页数错误
+//		printf("BC260:TCP数据发送失败,备份数据\r\n");
+//		W25QXX_Read( (uint8_t*)&nb_reissue_page,REISSUE_PAG_ADDR,sizeof(int));//读取之前缓存的页数
+//		strncpy(nb_reissue_buff, msg, sizeof(nb_reissue_buff) - 1);	//把数据copy到缓存数组中
+//		W25QXX_Write( (uint8_t*)nb_reissue_buff,REISSUE_MESSAGE_ADDR+nb_reissue_page*500,500);//进行数据备份
+//		nb_reissue_page++;
+//		W25QXX_Write( (uint8_t*)&nb_reissue_page,REISSUE_PAG_ADDR,sizeof(int));//更新缓存页数
+//		clear_BUF(rx2_buffer);
+//		vPortFree(q);
+//		q = NULL;
+//		return 0;//直接返回，后面的查询不用进行了。防止页数错误
 		}
 		else
 		{
@@ -486,7 +484,7 @@ int32_t TCP_Sent_Date_NB(char* msg)
 			return 1;//返回1
 			}
 			osDelay(1000);
-			if(loop++>=5)//等待10秒还没接收到应答
+			if(loop++>=7)//等待10秒还没接收到应答
 			{
 				printf("BC260:未收到服务器应答,TCP数据发送失败,备份数据\r\n");
 				W25QXX_Read( (uint8_t*)&nb_reissue_page,REISSUE_PAG_ADDR,sizeof(int));//读取之前缓存的页数

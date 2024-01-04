@@ -63,3 +63,5 @@ mb+nb+rtc\edit.o: ../Core/Inc/usart.h
 mb+nb+rtc\edit.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
 mb+nb+rtc\edit.o: ../Core/Inc/w25qxx.h
 mb+nb+rtc\edit.o: ../Core/Inc/gpio.h
+mb+nb+rtc\edit.o: ../Core/Inc/rtc.h
+mb+nb+rtc\edit.o: ../Core/Inc/adc.h

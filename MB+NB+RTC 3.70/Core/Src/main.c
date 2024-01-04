@@ -91,15 +91,15 @@ extern struct senser  senser1;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+		NVIC_SetVectorTable(NVIC_VectTab_FLASH, BOOT_SIZE);//中断向量表偏移
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-	NVIC_SetVectorTable(NVIC_VectTab_FLASH, BOOT_SIZE);//中断向量表偏移
+
   /* USER CODE END Init */
 
   /* Configure the system clock */

@@ -84,7 +84,6 @@ void Date_Report_tcp(void);//数据上传函数
 	uint8_t date_flag=0;//数据读取情况标志位
 	
 	uint8_t BLE_Flag = 0; //一帧数据接收完成标志
-	volatile uint8_t Code_Versions[10] = "2023.8.10"; //一帧数据接收完成标志
 	int rsensornum=0;
 	int rsensornum_err=0;
 	int sensornum=0;
@@ -93,7 +92,7 @@ void Date_Report_tcp(void);//数据上传函数
 	struct senser senser2;
 	struct senser rsenser1; 
 	struct senser rsenser2;
-	uint16_t ADC_Value[100]={0};
+	 uint16_t ADC_Value[100]={0};
 #define DATE_SIZE sizeof(tbuf)
 	
 /* Private user code ---------------------------------------------------------*/
@@ -219,7 +218,7 @@ __weak void StartDefaultTask(void const * argument)
 	max_page=rReportingTime/rSamplingTime;
 	printf("max_page=%d\r\n",max_page);
 	W25QXX_Read((uint8_t*)&rwork_state,WORK_STATE_ADDR, sizeof(int));//读取设备工作状态,1连续工作。2间歇工作
-//	HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, rSamplingTime, RTC_WAKEUPCLOCK_CK_SPRE_16BITS);//设置采样时间
+	HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, rSamplingTime, RTC_WAKEUPCLOCK_CK_SPRE_16BITS);//设置采样时间
 	osDelay(500);  
 	float PWR_Tvalue= W25Q128_Read_float(PWR_Tvalue_ADDR);
 	printf("电池低电压报警阈值：%2.2fV\r\n",PWR_Tvalue);

@@ -24,6 +24,7 @@
 #include "w25qxx.h"
 #include "spi.h"
 #include "modbus.h"
+#include "main.h"
 #include "cmsis_os.h"
 #include <stdlib.h>
 #include <string.h>
@@ -845,7 +846,17 @@ void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 	{
 	    W25QXX_Write((p1+6),IP_ADDR,40);//把ip信息写入flash
 		W25QXX_Read(mesbuf,IP_ADDR,40);
-		printf("IP及其端口号:%s\r\n",mesbuf);
+		printf("IP:%s\r\n",mesbuf);
+		p1=NULL;
+	}
+		p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+PORT=");//在字符串中寻找AT+IP=，找到后返回A的位置
+	if (p1 != NULL)
+	{
+	    int port;
+		sscanf((const char*)p1,"AT+PORT=%d",&port);//字符串中提取浮点数
+	    W25QXX_Write((uint8_t*)&port,PORT_ADDR,sizeof(int));//把ip信息写入flash
+		W25QXX_Read((uint8_t*)&port,PORT_ADDR,sizeof(int));
+		printf("端口号:%d\r\n",port);
 		p1=NULL;
 	}
 		//设备GPS定位开启控制
@@ -1024,7 +1035,7 @@ void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 		p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+VERSIONS?");//在字符串中寻找AT+GPS=，找到后返回A的位置
 	if (p1 != NULL)
 	{
-		printf("代码版本:%s\r\n",Code_Versions);
+		printf("代码版本:%f\r\n",VERSION);
 		p1=NULL;
 	}
 		//设备RTC时间查询
@@ -1062,6 +1073,16 @@ void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 		printf("传感器1波特率:%d\r\n",rboaud1);
 		printf("传感器2波特率:%d\r\n",rboaud2);
 		p1=NULL;
+	}
+	p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+SET");//
+	if (p1 != NULL)
+	{
+	 parseConfig(( const char*)rx1_buffer);//配置信息解析并存储
+	}
+	p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+SEEK");//在字符串中寻找AT+GPS=，找到后返回A的位置
+	if (p1 != NULL)
+	{
+	 seekConfig();
 	}
 	rx1_len = 0;//清除计数
 	rec1_end_flag = 0;//清除接收结束标志位

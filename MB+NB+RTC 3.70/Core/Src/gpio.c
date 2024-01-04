@@ -261,12 +261,12 @@ void DEVICE_Init(void )
 	  W25QXX_Read((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
 	  if(iwdg_flag!=0)
 	  {
-	  printf("开启看门狗\r\n");
+	  printf("APP开启看门狗\r\n");
 	  MX_IWDG_Init();
 	  }
 	  if(iwdg_flag==0)
 	  {
-		printf("复位关闭开门狗\r\n");
+		printf("APP关闭开门狗\r\n");
 		iwdg_flag=1;
 		W25QXX_Write((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
 		printf("Executing standby \r\n");
