@@ -21,7 +21,45 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "rtc.h"
+#include "spi.h"
 
+volatile uint8_t BC260_rec_flag = 0; //BC260一帧数据接收完成标志
+volatile uint8_t EC20_rec_flag = 0; //BC260一帧数据接收完成标志
+//串口1（蓝牙）（调试口）
+
+volatile uint8_t rx1_len = 0;  //USART1接收一帧数据的长度
+volatile uint8_t rec1_end_flag = 0; //一帧数据接收完成标志
+uint8_t rx1_buffer[BUFFER_SIZE]={0};  //接收数据缓存数组
+//串口2 （BC260）
+
+volatile uint8_t rx2_len = 0;  //USART2接收一帧数据的长度
+volatile uint8_t rec2_end_flag = 0; //一帧数据接收完成标志
+uint8_t rx2_buffer[BUFFER_SIZE]={0};  //接收数据缓存数组
+
+ //串口1重定向
+ #if 1   
+struct __FILE 
+{ 
+  int handle; 
+}; 
+
+FILE __stdout;  //定义_sys_exit()以避免使用半主机模式    
+void _sys_exit(int x) 
+{ 
+  x = x; 
+} 
+//重定义fputc函数
+int fputc(int ch, FILE *f)
+{ 	
+  while((USART1->SR&0X40)==0);//循环发送,直到发送完毕   
+  USART1->DR=(uint8_t)ch;      
+  return ch;
+}
+#endif
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart5;
@@ -441,5 +479,82 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void Usart1_IDLE(void)      //USART1的IDLE接收
+{   
+	uint32_t tmp_flag = 0;   
+	uint32_t temp;
+   	tmp_flag =__HAL_UART_GET_FLAG(&huart1,UART_FLAG_IDLE); //获取IDLE标志位
+   if((tmp_flag != RESET))//idle标志被置位
+   {
+   		__HAL_UART_CLEAR_IDLEFLAG(&huart1);//清除标志位
+   		HAL_UART_DMAStop(&huart1); //  停止DMA传输，防止
+   		temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);// 获取DMA中未传输的数据个数   
+   		rx1_len =  BUFFER_SIZE - temp; //总计数减去未传输的数据个数，得到已经接收的数据个数
+   		rec1_end_flag = 1;	// 接受完成标志位置1	
+   }
+}
 
+void Usart1_Handle()     //USART1对接收的一帧数据进行处理
+{
+   DMA_Usart1_Send(rx1_buffer, rx1_len);  //将接收到的数据回发给发送端
+   rx1_len = 0;//清除计数
+   rec1_end_flag = 0;//清除接收结束标志位
+   HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);//重新打开DMA接收
+}
+
+void DMA_Usart1_Send(uint8_t *buf,uint8_t len) //串口发送封装
+{   
+	if(HAL_UART_Transmit_DMA(&huart1,buf,len)!= HAL_OK) //判断是否发送正常，如果出现异常则进入异常中断函数
+	{
+  		Error_Handler();
+ 	}
+}
+
+
+
+void Usart2_IDLE(void)      //USART1的IDLE接收
+{   
+	uint32_t tmp_flag = 0;   
+	uint32_t temp;
+   	tmp_flag =__HAL_UART_GET_FLAG(&huart2,UART_FLAG_IDLE); //获取IDLE标志位
+   if((tmp_flag != RESET))//idle标志被置位
+   {
+   		__HAL_UART_CLEAR_IDLEFLAG(&huart2);//清除标志位
+   		HAL_UART_DMAStop(&huart2); //  停止DMA传输，防止
+   		temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);// 获取DMA中未传输的数据个数   
+   		rx2_len =  BUFFER_SIZE - temp; //总计数减去未传输的数据个数，得到已经接收的数据个数
+   		rec2_end_flag = 1;	// 接受完成标志位置1	
+   }
+}
+
+void Usart2_Handle()     //USART2对接收的一帧数据进行处理
+{
+   DMA_Usart2_Send(rx2_buffer, rx2_len);  //将接收到的数据回发给发送端
+   rx2_len = 0;//清除计数
+   rec2_end_flag = 0;//清除接收结束标志位
+   HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);//重新打开DMA接收
+}
+
+void DMA_Usart2_Send(uint8_t *buf,uint8_t len) //串口发送封装
+{   
+	if(HAL_UART_Transmit_DMA(&huart2,buf,len)!= HAL_OK) //判断是否发送正常，如果出现异常则进入异常中断函数
+	{
+  		Error_Handler();
+ 	}
+}
+
+void clear_BUF(uint8_t* usart)
+{
+	if(usart==rx1_buffer)
+	{
+		memset(rx1_buffer,0,sizeof(rx1_buffer));
+	}
+		if(usart==rx2_buffer)
+	{
+		memset(rx2_buffer,0,sizeof(rx2_buffer));
+		BC260_rec_flag=0;
+	}
+	
+		
+}
 /* USER CODE END 1 */

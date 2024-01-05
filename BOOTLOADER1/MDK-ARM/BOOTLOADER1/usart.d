@@ -36,3 +36,8 @@ bootloader1\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 bootloader1\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 bootloader1\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 bootloader1\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+bootloader1\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdio.h
+bootloader1\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
+bootloader1\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
+bootloader1\usart.o: ../Core/Inc/rtc.h
+bootloader1\usart.o: ../Core/Inc/spi.h

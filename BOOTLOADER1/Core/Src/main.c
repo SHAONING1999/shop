@@ -101,7 +101,10 @@ int main(void)
   MX_UART5_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-
+    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
+  	HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);  //开启DMA接收
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
+  	HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -109,7 +112,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    if(rec1_end_flag)  //判断是否USART1接收到1帧数据
+	{Usart1_Handle(); }	 //前往数据处理函数处理接收到的数据。
+	if(rec2_end_flag)  //判断是否USART1接收到1帧数据
+	{Usart2_Handle(); }	 //前往数据处理函数处理接收到的数据。
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

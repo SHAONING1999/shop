@@ -41,4 +41,6 @@ bootloader1\main.o: ../Core/Inc/rtc.h
 bootloader1\main.o: ../Core/Inc/spi.h
 bootloader1\main.o: ../Core/Inc/tim.h
 bootloader1\main.o: ../Core/Inc/usart.h
+bootloader1\main.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdio.h
+bootloader1\main.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
 bootloader1\main.o: ../Core/Inc/gpio.h
