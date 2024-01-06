@@ -443,6 +443,31 @@
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>ota.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ota.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\w25qxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

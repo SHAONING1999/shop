@@ -35,7 +35,8 @@ extern "C" {
 extern SPI_HandleTypeDef hspi1;
 
 /* USER CODE BEGIN Private defines */
-
+void SPI1_SetSpeed(uint8_t  SPI_BaudRatePrescaler);
+uint8_t SPI1_ReadWriteByte(uint8_t TxData);
 /* USER CODE END Private defines */
 
 void MX_SPI1_Init(void);

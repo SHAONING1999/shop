@@ -44,3 +44,7 @@ bootloader1\main.o: ../Core/Inc/usart.h
 bootloader1\main.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdio.h
 bootloader1\main.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
 bootloader1\main.o: ../Core/Inc/gpio.h
+bootloader1\main.o: ../Core/Inc/delay.h
+bootloader1\main.o: ../Core/Inc/w25qxx.h
+bootloader1\main.o: ../Core/Inc/sys.h
+bootloader1\main.o: ../Core/Inc/flash.h

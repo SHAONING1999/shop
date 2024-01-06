@@ -95,22 +95,22 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 void iap_interface_close_all_interrupt(void)
 {
-//	SysTick->CTRL=0;
-//	SysTick->VAL=0x00;
-//	HAL_NVIC_DisableIRQ(USART1_IRQn);
-//	HAL_NVIC_DisableIRQ(USART2_IRQn);
-//	HAL_NVIC_DisableIRQ(DMA1_Stream5_IRQn);
-//	HAL_NVIC_DisableIRQ(DMA1_Stream6_IRQn);
-//	HAL_NVIC_DisableIRQ(DMA1_Stream2_IRQn);
-//	HAL_NVIC_DisableIRQ(DMA1_Stream7_IRQn);
+	SysTick->CTRL=0;
+	SysTick->VAL=0x00;
+	HAL_NVIC_DisableIRQ(USART1_IRQn);
+	HAL_NVIC_DisableIRQ(USART2_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream5_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream6_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream2_IRQn);
+	HAL_NVIC_DisableIRQ(DMA1_Stream7_IRQn);
 	
-	HAL_NVIC_EnableIRQ(USART1_IRQn);
-	HAL_NVIC_EnableIRQ(USART2_IRQn);
-	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
-	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
-	HAL_NVIC_EnableIRQ(DMA1_Stream2_IRQn);
-	HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
-	HAL_SPI_MspDeInit(&hspi1);
+//	HAL_NVIC_EnableIRQ(USART1_IRQn);
+//	HAL_NVIC_EnableIRQ(USART2_IRQn);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream2_IRQn);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
+//	HAL_SPI_MspDeInit(&hspi1);
 	
 }
 //THUMB指令不支持汇编内联

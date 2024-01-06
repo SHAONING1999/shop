@@ -28,12 +28,25 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdio.h"
+#include "delay.h"
+#include "w25qxx.h"
+#include "spi.h"
+#include "sys.h"
+#include "flash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+typedef  void (*iapfun)(void);
+iapfun jump2app; 
 
+void iap_interface_load_app(uint32_t appxaddr)
+{
+	jump2app=(iapfun)*(uint32_t*)(appxaddr+4);		//拷贝APP程序的复位中断函数地址
+	MSR_MSP(*(uint32_t*)appxaddr);					//初始化APP堆栈指针,对APP程序的堆栈进行重构,就是说重新分配RAM
+	jump2app();									//执行APP的复位中断函数,最终便会跳转到APP的main函数
+}
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -91,20 +104,34 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_IWDG_Init();
   MX_RTC_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_SPI1_Init();
+  W25QXX_Init();//W25Q128初始化
   MX_TIM4_Init();
   MX_TIM5_Init();
   MX_UART5_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
+  	 int iwdg_flag=1;
+	 W25QXX_Read((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
+	 if(iwdg_flag!=0)
+	  {
+	  printf("bootloader开启看门狗\r\n");
+	  MX_IWDG_Init();
+	  }
+	  else 
+	   printf("bootloader关闭看门狗\r\n");
     __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
   	HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);  //开启DMA接收
 	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
   	HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
+	  //	//关所有中断
+    iap_interface_close_all_interrupt();
+//	  
+    printf("bootloader跳转APP\r\n");
+	iap_interface_load_app(ApplicationAddress);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -116,6 +143,7 @@ int main(void)
 	{Usart1_Handle(); }	 //前往数据处理函数处理接收到的数据。
 	if(rec2_end_flag)  //判断是否USART1接收到1帧数据
 	{Usart2_Handle(); }	 //前往数据处理函数处理接收到的数据。
+	HAL_IWDG_Refresh(&hiwdg);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

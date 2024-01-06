@@ -2,6 +2,10 @@
 #define __STMFLASH_H
 #include "sys.h"
 
+#define NVIC_VectTab_RAM             ((uint32_t)0x20000000)
+#define NVIC_VectTab_FLASH           ((uint32_t)0x8000000)
+#define BOOT_SIZE						        	0x40000
+#define ApplicationAddress	(NVIC_VectTab_FLASH + BOOT_SIZE) 
 
 //FLASH起始地址
 #define STM32_FLASH_BASE 0x08000000 	//STM32 FLASH的起始地址
