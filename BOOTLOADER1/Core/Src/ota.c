@@ -5,41 +5,48 @@
 #include "ota.h" 
 
 
-u32 iapbuf[512]; 	//2K×Ö½Ú»º´æ  
-//appxaddr:Ó¦ÓÃ³ÌĞòµÄÆğÊ¼µØÖ·
-//appbuf:Ó¦ÓÃ³ÌĞòCODE.
-//appsize:Ó¦ÓÃ³ÌĞò´óĞ¡(×Ö½Ú).
+u32 iapbuf[512]; 	//2Kå­—èŠ‚ç¼“å­˜  
+//appxaddr:åº”ç”¨ç¨‹åºçš„èµ·å§‹åœ°å€
+//appbuf:åº”ç”¨ç¨‹åºCODE.
+//appsize:åº”ç”¨ç¨‹åºå¤§å°(å­—èŠ‚).
 void ota_write_appbin(u32 appxaddr,u8 *appbuf,u32 appsize)
 {
 	unsigned char* p1;
-	for(int t=0;t<=500;t++)
-	printf("%s",appbuf);
-	p1 = (unsigned char*)strstr(( const char*)appbuf, "success\"}");//¶¨Î»µ½´úÂëÎ»ÖÃ
+	p1 = (unsigned char*)strstr(( const char*)appbuf, "success\"}");//å®šä½åˆ°ä»£ç ä½ç½®
  {
 	u32 t;
 	u16 i=0;
 	u32 temp;
-	 p1=p1+8;
-	u8 *dfu=p1;//´®¿Ú½ÓÊÕÊı¾İ
-	 for(int t=0;t<=256;t++)
+	 p1=p1+9;
+	u8 *dfu=p1;//ä¸²å£æ¥æ”¶æ•°æ®
 	 printf("%s",(uint8_t*)p1++);
-	for(t=0;t<appsize;t+=10)
+	for(t=0;t<appsize;t+=4)
 	{			
-		//°Ñ´®¿Ú½ÓÊÕµ½µÄcharÀàĞÍ×ª»»³Éu32»º´æÔÚiapbufÀïÃæ
+		//æŠŠä¸²å£æ¥æ”¶åˆ°çš„charç±»å‹è½¬æ¢æˆu32ç¼“å­˜åœ¨iapbufé‡Œé¢
 		temp=(u32)dfu[3]<<24;   
 		temp|=(u32)dfu[2]<<16;    
 		temp|=(u32)dfu[1]<<8;
 		temp|=(u32)dfu[0];	  
-		dfu+=4;//Æ«ÒÆ4¸ö×Ö½Ú
+		dfu+=4;//åç§»4ä¸ªå­—èŠ‚
 		iapbuf[i++]=temp;
-		
-//		if(i==appsize)//Èç¹û½ÓÊÕÍê³É£¬Ö´ĞĞĞ´Èë²Ù×÷
-//		{
-//			STMFLASH_Write(appxaddr,iapbuf,appsize);
-//			printf("%x\r\n",(uint8_t)appbuf);
-//		}
-		
+			
 	} 
+	if(i==(appsize/4))//å¦‚æœæ¥æ”¶å®Œæˆï¼Œæ‰§è¡Œå†™å…¥æ“ä½œ
+		{
+			printf("å†™å…¥%dä¸ªå­—èŠ‚åˆ°å†…éƒ¨flash \r\n",appsize);
+			for(int num=1;num<=appsize;num++)
+			{
+			printf("0x%X ",p1[num-1]);
+			}
+			printf("\r\n ");
+		    for(int num=1;num<=appsize;num++)
+			{
+			printf("%c  ",p1[num-1]);	
+			}
+			printf("\r\n ");
+			STMFLASH_Write(appxaddr,iapbuf,i);
+			
+		}
  }
  memset(iapbuf,0,sizeof(iapbuf));
 }

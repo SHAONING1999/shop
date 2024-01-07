@@ -64,7 +64,8 @@ void Error_Handler(void);
 #define PWR_FLASH_Pin GPIO_PIN_0
 #define PWR_FLASH_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
-
+#define NB_PWR_EN_Pin GPIO_PIN_11
+#define NB_PWR_EN_GPIO_Port GPIOA
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

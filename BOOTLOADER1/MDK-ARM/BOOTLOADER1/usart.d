@@ -41,3 +41,6 @@ bootloader1\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
 bootloader1\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
 bootloader1\usart.o: ../Core/Inc/rtc.h
 bootloader1\usart.o: ../Core/Inc/spi.h
+bootloader1\usart.o: ../Core/Inc/ota.h
+bootloader1\usart.o: ../Core/Inc/sys.h
+bootloader1\usart.o: ../Core/Inc/flash.h

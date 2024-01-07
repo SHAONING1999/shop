@@ -128,10 +128,10 @@ int main(void)
 	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
   	HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
 	  //	//关所有中断
-    iap_interface_close_all_interrupt();
-//	  
-    printf("bootloader跳转APP\r\n");
-	iap_interface_load_app(ApplicationAddress);
+//    iap_interface_close_all_interrupt();
+////	  
+//    printf("bootloader跳转APP\r\n");
+//	iap_interface_load_app(ApplicationAddress);
   /* USER CODE END 2 */
 
   /* Infinite loop */
