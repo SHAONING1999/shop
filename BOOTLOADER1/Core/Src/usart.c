@@ -28,9 +28,16 @@
 #include "spi.h"
 #include "ota.h"
 #include "flash.h"
+#include "main.h"
+#include "menu.h"
+#include "menu.h"
+#include "flash_if.h"
+#include "ymodem.h"
+#include "serialCOM.h"
 
 volatile uint8_t BC260_rec_flag = 0; //BC260一帧数据接收完成标志
 volatile uint8_t EC20_rec_flag = 0; //BC260一帧数据接收完成标志
+static void IAP_Init(void);
 //串口1（蓝牙）（调试口）
 
 volatile uint8_t rx1_len = 0;  //USART1接收一帧数据的长度
@@ -499,7 +506,7 @@ void Usart1_IDLE(void)      //USART1的IDLE接收
 void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 {
 //   DMA_Usart1_Send(rx1_buffer, rx1_len);  //将接收到的数据回发给发送端
-	ota_write_appbin(0x8040000,rx1_buffer,4);
+//	ota_write_appbin(0x8040000,rx1_buffer,4);
    rx1_len = 0;//清除计数
    rec1_end_flag = 0;//清除接收结束标志位
    HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);//重新打开DMA接收
@@ -560,4 +567,6 @@ void clear_BUF(uint8_t* usart)
 	
 		
 }
+
+
 /* USER CODE END 1 */

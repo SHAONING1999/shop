@@ -51,3 +51,12 @@ void ota_write_appbin(u32 appxaddr,u8 *appbuf,u32 appsize)
  memset(iapbuf,0,sizeof(iapbuf));
 }
 
+typedef  void (*iapfun)(void);
+iapfun jump2app; 
+
+void iap_interface_load_app(uint32_t appxaddr)
+{
+	jump2app=(iapfun)*(uint32_t*)(appxaddr+4);		//拷贝APP程序的复位中断函数地址
+	MSR_MSP(*(uint32_t*)appxaddr);					//初始化APP堆栈指针,对APP程序的堆栈进行重构,就是说重新分配RAM
+	jump2app();									//执行APP的复位中断函数,最终便会跳转到APP的main函数
+}

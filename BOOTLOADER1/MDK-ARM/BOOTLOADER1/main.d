@@ -48,3 +48,10 @@ bootloader1\main.o: ../Core/Inc/delay.h
 bootloader1\main.o: ../Core/Inc/w25qxx.h
 bootloader1\main.o: ../Core/Inc/sys.h
 bootloader1\main.o: ../Core/Inc/flash.h
+bootloader1\main.o: ../Core/Inc/ota.h
+bootloader1\main.o: ..\Core\Inc\IAP\menu.h
+bootloader1\main.o: ..\Core\Inc\IAP\flash_if.h
+bootloader1\main.o: ..\Core\Inc\IAP\ymodem.h
+bootloader1\main.o: ..\Core\Inc\IAP\serialCOM.h
+bootloader1\main.o: ..\Core\Inc\IAP\common.h
+bootloader1\main.o: ..\Core\Inc\IAP\SerialCOM.h

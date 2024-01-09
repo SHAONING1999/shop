@@ -44,3 +44,9 @@ bootloader1\usart.o: ../Core/Inc/spi.h
 bootloader1\usart.o: ../Core/Inc/ota.h
 bootloader1\usart.o: ../Core/Inc/sys.h
 bootloader1\usart.o: ../Core/Inc/flash.h
+bootloader1\usart.o: ..\Core\Inc\IAP\menu.h
+bootloader1\usart.o: ..\Core\Inc\IAP\flash_if.h
+bootloader1\usart.o: ..\Core\Inc\IAP\ymodem.h
+bootloader1\usart.o: ..\Core\Inc\IAP\serialCOM.h
+bootloader1\usart.o: ..\Core\Inc\IAP\common.h
+bootloader1\usart.o: ..\Core\Inc\IAP\SerialCOM.h
