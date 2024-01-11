@@ -98,12 +98,29 @@ void iap_interface_close_all_interrupt(void)
 	SysTick->CTRL=0;
 	SysTick->VAL=0x00;
 	HAL_NVIC_DisableIRQ(USART1_IRQn);
+	
 	HAL_NVIC_DisableIRQ(USART2_IRQn);
+//	__HAL_RCC_USART2_CLK_DISABLE();
+	
+//	__HAL_RCC_USART6_CLK_DISABLE();
+	HAL_NVIC_DisableIRQ(USART6_IRQn);
+	
+//	__HAL_RCC_UART5_CLK_DISABLE();
+	HAL_NVIC_DisableIRQ(UART5_IRQn);
+	
 	HAL_NVIC_DisableIRQ(DMA1_Stream5_IRQn);
 	HAL_NVIC_DisableIRQ(DMA1_Stream6_IRQn);
 	HAL_NVIC_DisableIRQ(DMA1_Stream2_IRQn);
 	HAL_NVIC_DisableIRQ(DMA1_Stream7_IRQn);
-	
+
+	__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+	__HAL_UART_CLEAR_IDLEFLAG(&huart1);//清除标志位
+	HAL_UART_DMAStop(&huart1); //  停止DMA传输，防止
+
+	__HAL_UART_DISABLE_IT(&huart2, UART_IT_IDLE);
+	__HAL_UART_CLEAR_IDLEFLAG(&huart2);//清除标志位
+	HAL_UART_DMAStop(&huart2); //  停止DMA传输，防止
+
 //	HAL_NVIC_EnableIRQ(USART1_IRQn);
 //	HAL_NVIC_EnableIRQ(USART2_IRQn);
 //	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);

@@ -1,0 +1,10 @@
+bootloader1\cjson.o: ..\Core\Src\cJSON.c
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdio.h
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\math.h
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\limits.h
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\ctype.h
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\float.h
+bootloader1\cjson.o: ../Core/Inc/cJSON.h
+bootloader1\cjson.o: E:\MDK\ARM\ARMCC\Bin\..\include\stddef.h

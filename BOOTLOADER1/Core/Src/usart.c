@@ -30,7 +30,6 @@
 #include "flash.h"
 #include "main.h"
 #include "menu.h"
-#include "menu.h"
 #include "flash_if.h"
 #include "ymodem.h"
 #include "serialCOM.h"
@@ -40,12 +39,12 @@ volatile uint8_t EC20_rec_flag = 0; //BC260一帧数据接收完成标志
 static void IAP_Init(void);
 //串口1（蓝牙）（调试口）
 
-volatile uint8_t rx1_len = 0;  //USART1接收一帧数据的长度
+volatile int rx1_len = 0;  //USART1接收一帧数据的长度
 volatile uint8_t rec1_end_flag = 0; //一帧数据接收完成标志
 uint8_t rx1_buffer[BUFFER_SIZE]={0};  //接收数据缓存数组
 //串口2 （BC260）
 
-volatile uint8_t rx2_len = 0;  //USART2接收一帧数据的长度
+volatile int rx2_len = 0;  //USART2接收一帧数据的长度
 volatile uint8_t rec2_end_flag = 0; //一帧数据接收完成标志
 uint8_t rx2_buffer[BUFFER_SIZE]={0};  //接收数据缓存数组
 
@@ -150,7 +149,7 @@ void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -162,7 +161,8 @@ void MX_USART2_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART2_Init 2 */
-
+  __HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断
+  HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);
   /* USER CODE END USART2_Init 2 */
 
 }
@@ -501,6 +501,10 @@ void Usart1_IDLE(void)      //USART1的IDLE接收
    		rx1_len =  BUFFER_SIZE - temp; //总计数减去未传输的数据个数，得到已经接收的数据个数
    		rec1_end_flag = 1;	// 接受完成标志位置1	
    }
+   if(rec1_end_flag ==1)
+   {
+	   Usart1_Handle();
+   }
 }
 
 void Usart1_Handle()     //USART1对接收的一帧数据进行处理
@@ -509,6 +513,7 @@ void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 //	ota_write_appbin(0x8040000,rx1_buffer,4);
    rx1_len = 0;//清除计数
    rec1_end_flag = 0;//清除接收结束标志位
+   
    HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);//重新打开DMA接收
 }
 
@@ -534,15 +539,22 @@ void Usart2_IDLE(void)      //USART1的IDLE接收
    		temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);// 获取DMA中未传输的数据个数   
    		rx2_len =  BUFFER_SIZE - temp; //总计数减去未传输的数据个数，得到已经接收的数据个数
    		rec2_end_flag = 1;	// 接受完成标志位置1	
+	    BC260_rec_flag=1;
+
    }
 }
 
 void Usart2_Handle()     //USART2对接收的一帧数据进行处理
 {
-   DMA_Usart2_Send(rx2_buffer, rx2_len);  //将接收到的数据回发给发送端
-   rx2_len = 0;//清除计数
-   rec2_end_flag = 0;//清除接收结束标志位
-   HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);//重新打开DMA接收
+	rx2_len = 0;//清除计数
+	rec2_end_flag = 0;//清除接收结束标志位
+	
+	HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);//重新打开DMA接收
+//   DMA_Usart1_Send(rx2_buffer, rx2_len);  //将接收到的数据回发给发送端
+	//printf("USART2接收：%s\r\n",rx2_buffer);  //串口1打印显示串口2发送的结果s
+//			for(int i=0;i<250;i++)
+//			{printf("%c",*(rx2_buffer+i));}
+
 }
 
 void DMA_Usart2_Send(uint8_t *buf,uint8_t len) //串口发送封装

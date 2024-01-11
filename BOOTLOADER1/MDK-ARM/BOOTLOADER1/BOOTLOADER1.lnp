@@ -16,6 +16,7 @@
 "bootloader1\w25qxx.o"
 "bootloader1\flash.o"
 "bootloader1\nbiot.o"
+"bootloader1\cjson.o"
 "bootloader1\stm32f4xx_hal_iwdg.o"
 "bootloader1\stm32f4xx_hal_rcc.o"
 "bootloader1\stm32f4xx_hal_rcc_ex.o"

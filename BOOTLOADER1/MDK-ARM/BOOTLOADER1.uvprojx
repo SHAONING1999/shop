@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>3</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -472,6 +472,11 @@
               <FileName>NBiot.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\NBiot.c</FilePath>
+            </File>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\cJSON.c</FilePath>
             </File>
           </Files>
         </Group>

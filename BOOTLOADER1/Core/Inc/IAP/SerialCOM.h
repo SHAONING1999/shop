@@ -8,8 +8,8 @@
 #include "ymodem.h"
 #include "usart.h"
 
-#define Serial_COM          USART1
-#define UartHandle          huart1
+#define Serial_COM          USART1  //移植封装，不要改
+#define UartHandle          huart1 //定向于USART1，想修改串口改这个
 void SerialCOM_Init(void);
 
 

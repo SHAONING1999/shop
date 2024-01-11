@@ -35,7 +35,8 @@
 #include "sys.h"
 #include "flash.h"
 #include "ota.h"
-
+#include "NBiot.h"
+//IAP相关
 #include "menu.h"
 #include "flash_if.h"
 #include "ymodem.h"
@@ -53,7 +54,8 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+//存储阿里云-MQTT-OTA升级包信息
+ struct aliyun MQTTaliyun;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -117,18 +119,18 @@ int main(void)
 	 if(iwdg_flag!=0)
 	  {
 	  printf("bootloader开启看门狗\r\n");
-	  MX_IWDG_Init();
+//	  MX_IWDG_Init();
 	  }
 	  else 
 	   printf("bootloader关闭看门狗\r\n");
-//    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
-//  	HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);  //开启DMA接收
-//	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
-//  	HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
-	  //IAP升级记得关注释DMA代码
-    iap_interface_close_all_interrupt();	  
-    printf("bootloader跳转APP\r\n");
-	iap_interface_load_app(ApplicationAddress);
+    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
+  	HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);  //开启DMA接收
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
+  	HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
+	  BC260_OTA((char*)rx2_buffer,&MQTTaliyun);
+//    iap_interface_close_all_interrupt();	  
+//    printf("bootloader跳转APP\r\n");
+//	iap_interface_load_app(ApplicationAddress);
 	  
 
 //		Main_Menu ();//IAP功能函数
@@ -140,10 +142,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    if(rec1_end_flag)  //判断是否USART1接收到1帧数据
-	{Usart1_Handle(); }	 //前往数据处理函数处理接收到的数据。
-	if(rec2_end_flag)  //判断是否USART1接收到1帧数据
-	{Usart2_Handle(); }	 //前往数据处理函数处理接收到的数据。
+//    if(rec1_end_flag)  //判断是否USART1接收到1帧数据
+//	{Usart1_Handle(); }	 //前往数据处理函数处理接收到的数据。
+//	if(rec2_end_flag)  //判断是否USART1接收到1帧数据
+//	{Usart2_Handle(); }	 //前往数据处理函数处理接收到的数据。
 //	HAL_IWDG_Refresh(&hiwdg);
     /* USER CODE BEGIN 3 */
   }

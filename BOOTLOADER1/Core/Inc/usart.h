@@ -35,7 +35,7 @@ extern "C" {
 
 extern volatile uint8_t BC260_rec_flag; //BC260接收标志位
 extern volatile uint8_t EC20_rec_flag; //BC260接收标志位
-extern volatile uint8_t rx1_len;  //接收一帧数据的长度
+extern volatile int rx1_len;  //接收一帧数据的长度
 extern volatile uint8_t rec1_end_flag; //一帧数据接收完成标志
 extern uint8_t rx1_buffer[BUFFER_SIZE];  //接收数据缓存数组
 
@@ -44,7 +44,7 @@ void DMA_Usart1_Send(uint8_t *buf,uint8_t len);//串口发送封装
 void Usart1_IDLE(void);
 void clear_BUF(uint8_t * usart);
 
-extern volatile uint8_t rx2_len;  //接收一帧数据的长度
+extern volatile int rx2_len;  //接收一帧数据的长度
 extern volatile uint8_t rec2_end_flag; //一帧数据接收完成标志
 extern uint8_t rx2_buffer[BUFFER_SIZE];  //接收数据缓存数组
 

@@ -49,6 +49,7 @@ bootloader1\main.o: ../Core/Inc/w25qxx.h
 bootloader1\main.o: ../Core/Inc/sys.h
 bootloader1\main.o: ../Core/Inc/flash.h
 bootloader1\main.o: ../Core/Inc/ota.h
+bootloader1\main.o: ../Core/Inc/NBiot.h
 bootloader1\main.o: ..\Core\Inc\IAP\menu.h
 bootloader1\main.o: ..\Core\Inc\IAP\flash_if.h
 bootloader1\main.o: ..\Core\Inc\IAP\ymodem.h

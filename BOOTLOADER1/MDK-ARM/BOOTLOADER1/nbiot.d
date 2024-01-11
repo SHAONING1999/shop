@@ -43,3 +43,7 @@ bootloader1\nbiot.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
 bootloader1\nbiot.o: ../Core/Inc/delay.h
 bootloader1\nbiot.o: ../Core/Inc/w25qxx.h
 bootloader1\nbiot.o: ../Core/Inc/rtc.h
+bootloader1\nbiot.o: ../Core/Inc/cjson.h
+bootloader1\nbiot.o: ../Core/Inc/ota.h
+bootloader1\nbiot.o: ../Core/Inc/sys.h
+bootloader1\nbiot.o: ../Core/Inc/flash.h

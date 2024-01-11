@@ -19,7 +19,6 @@ void ota_write_appbin(u32 appxaddr,u8 *appbuf,u32 appsize)
 	u32 temp;
 	 p1=p1+9;
 	u8 *dfu=p1;//串口接收数据
-	 printf("%s",(uint8_t*)p1++);
 	for(t=0;t<appsize;t+=4)
 	{			
 		//把串口接收到的char类型转换成u32缓存在iapbuf里面
@@ -34,16 +33,11 @@ void ota_write_appbin(u32 appxaddr,u8 *appbuf,u32 appsize)
 	if(i==(appsize/4))//如果接收完成，执行写入操作
 		{
 			printf("写入%d个字节到内部flash \r\n",appsize);
-			for(int num=1;num<=appsize;num++)
-			{
-			printf("0x%X ",p1[num-1]);
-			}
-			printf("\r\n ");
-		    for(int num=1;num<=appsize;num++)
-			{
-			printf("%c  ",p1[num-1]);	
-			}
-			printf("\r\n ");
+//			for(int num=1;num<=appsize;num++)
+//			{
+//			printf("0x%02X ",p1[num-1]);
+//			}
+//			printf("\r\n ");
 			STMFLASH_Write(appxaddr,iapbuf,i);
 			
 		}
