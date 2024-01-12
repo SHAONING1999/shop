@@ -11,13 +11,22 @@
 #include "cjson.h"
 #include "ota.h"
 #include "flash.h"
+#pragma diag_suppress 870 //屏蔽中文乱码警告
+/******************    阿里云OTA升级配置参数：BC260Y    *********************/
+#define   HOST_NAME     "iot-as-mqtt.cn-shanghai.aliyuncs.com"        //服务器IP地址(mqtt固定)
+#define   HOST_PORT     "1883"                						  //阿里云  Mqtt 
+#define   USER_NAME     "a1SVuSaiVBK"               				  //产品ID
+#define   CLIENT_ID     "MN80808080800003"          				  //设备ID
+#define   PASSWORD      "57e4c89ce35385f33172703997d47dde"            //鉴权信息，设置为芯片序列号
+#define   SIZE        	 256    									  //分包大小（字节）
 /******************    芯片型号：BC260Y    *********************/
-//     波特率：9600
+//     波特率：15200
 //     接串口:USART2
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //测试NB模块运行状态
 // MQTT消息回调函数类型
-uint8_t BC260_OTA(char* usart_buff,struct aliyun* aliyun1)
+
+int BC260_OTA(char* usart_buff,struct aliyun* aliyun1)
 {
 	//测试模块硬件
 	if(Test_NB_STA())
@@ -28,7 +37,7 @@ uint8_t BC260_OTA(char* usart_buff,struct aliyun* aliyun1)
 	//MQTT连接
 	if(NB_MQTT_CONNECT())
 	{
-		printf("MQTT连接失败硬件异常\r\n");
+		printf("MQTT连接异常\r\n");
 		return -1;
 	}
 	//获取更新信息
@@ -51,12 +60,12 @@ uint8_t BC260_OTA(char* usart_buff,struct aliyun* aliyun1)
 	}
 	else//没有更新信息
 	{
-//		printf("无新固件，启动APP程序\r\n");
-//		iap_interface_close_all_interrupt();//关闭所有中断  
-//		iap_interface_load_app(ApplicationAddress);//APP程序跳转
+		printf("无新固件，启动APP程序\r\n");
+		iap_interface_close_all_interrupt();//关闭所有中断  
+		iap_interface_load_app(ApplicationAddress);//APP程序跳转
 	}
 	
-	
+	return 0;
 }
 
 //返回：-1测试异常
@@ -65,25 +74,26 @@ int Test_NB_STA(void )
 {
 	HAL_GPIO_WritePin(GPIOA,NB_PWR_EN_Pin, GPIO_PIN_SET);//NB模块供电
 	delay_ms(3000);
-	char *send_buf=NULL;
+
 	BC260Y_send_cmd("AT\r\n", "OK",30);
-	delay_ms(200);
+
 	BC260Y_send_cmd("AT\r\n", "OK",30);//返回ok
-	delay_ms(200);
+
 	BC260Y_send_cmd("AT+IPR=115200\r\n", "OK",100); 
-	delay_ms(200);
+
 	BC260Y_send_cmd("AT+QICLOSE=0\r\n", "OK",100);          //关闭已有连接
-	delay_ms(200);
+
 	//BC260Y模块设置
 	BC260Y_send_cmd("AT+QSCLK=0\r\n", "OK",100);  //关闭自动休眠
-	delay_ms(200);
+
 	BC260Y_send_cmd("ATE0\r\n", "OK",100);            //设置命令不回显
-	delay_ms(200);
+
 	BC260Y_send_cmd("ATI\r\n", "",100);             //查询设备型号
-	delay_ms(200);
-	BC260Y_send_cmd("AT+CSQ\r\n", "+CSQ:",100);          //查询信号强度
+
+	BC260Y_send_cmd("AT+CSQ\r\n", "+CSQ:",100);   	//查询信号强度
+	
 	BC260Y_send_cmd("AT+CMEE=1\r\n", "OK",100);       //启用结果码	
-	delay_ms(200);
+
   //SIM卡插入检查	
 	if(BC260Y_send_cmd("AT+CIMI\r\n", "460",300))    //检查是否有卡 
 	{
@@ -92,13 +102,13 @@ int Test_NB_STA(void )
 	}
 	delay_ms(500);
 	//检查网络注册
-	if(BC260Y_send_cmd("AT+CGATT=1\r\n", "OK",200))//激活网络
+	if(BC260_send_cmd_LOOP("AT+CGATT=1\r\n", "OK",200,3,1,"网络激活失败\r\n"))
 		return -1;//网络激活失败
 
 	
  return 0;
 }
-
+//与阿里云平台建立MQTT连接
 int NB_MQTT_CONNECT(void )
 {
 	char sendbuff[100];
@@ -113,41 +123,39 @@ int NB_MQTT_CONNECT(void )
 	
 	//连接阿里云平台
 	sprintf(sendbuff,"AT+QMTOPEN=0,\"%s\",%s\r\n",HOST_NAME,HOST_PORT);
-	BC260Y_send_cmd(sendbuff, "+QMTOPEN: 0,0",100);
+	BC260Y_send_cmd(sendbuff, "+QMTOPEN: 0,0",200);
 	
 	//设备登录
 	sprintf(sendbuff,"AT+QMTCFG=\"aliauth\",0,\"%s\",\"%s\",\"%s\"\r\n",USER_NAME,CLIENT_ID,PASSWORD);
 	BC260Y_send_cmd(sendbuff, "OK",100);
 	
 	//查询连接状态
-	BC260Y_send_cmd("AT+QMTCONN?\r\n", "+QMTOPEN: 0,1",100);
+	BC260Y_send_cmd("AT+QMTCONN?\r\n", "+QMTCONN: 0,1",100);
 		
 	
 	//登录mqtt
-	if(BC260Y_send_cmd("AT+QMTCONN=0,\"clientExample_1987\"\r\n", "+QMTCONN: 0,0,0",100))
+	if(BC260Y_send_cmd("AT+QMTCONN=0,\"clientExample_1987\"\r\n", "+QMTCONN: 0,0,0",200))
 		return -1;
 	
 	
 	//订阅OTA主题
-//	//设备请求OTA升级包信息
-//	sprintf(sendbuff,"/sys/%s/%s/thing/file/download",USER_NAME,CLIENT_ID);
-//	MQTTSubTopic(sendbuff);
 	//设备请求OTA升级包信息，消息响应主题
 	sprintf(sendbuff,"/sys/%s/%s/thing/ota/firmware/get_reply",USER_NAME,CLIENT_ID);
 	MQTTSubTopic(sendbuff);
 	//设备分包下载升级包响应主题
 	sprintf(sendbuff,"/sys/%s/%s/thing/file/download_reply",USER_NAME,CLIENT_ID);
 	MQTTSubTopic(sendbuff);
-	//退订响应主题，
-	sprintf(sendbuff,"/sys/%s/%s/thing/file/download",USER_NAME,CLIENT_ID);
-	MQTTUnSubTopic(sendbuff);
+//	//退订响应主题，
+//	sprintf(sendbuff,"/sys/%s/%s/thing/file/download",USER_NAME,CLIENT_ID);
+//	MQTTUnSubTopic(sendbuff);
 
  return 0;
 }
 
 
 //NB通讯：往MQTT订阅主题
-uint8_t MQTTSubTopic(char* SubTopic)
+//成功返回0，失败返回-1
+int MQTTSubTopic(char* SubTopic)
 {
 	char topic_buff[80];
 	sprintf(topic_buff,"AT+QMTSUB=0,1,\"%s\",0\r\n",SubTopic);
@@ -158,7 +166,8 @@ uint8_t MQTTSubTopic(char* SubTopic)
 }
 
 //NB通讯：往MQTT退订主题
-uint8_t MQTTUnSubTopic(char* UNSubTopic)
+//成功返回0，失败返回-1
+int MQTTUnSubTopic(char* UNSubTopic)
 {
 	char topic_buff[80];
 	sprintf(topic_buff,"AT+QMTUNS=0,1,\"%s\"\r\n",UNSubTopic);
@@ -192,79 +201,6 @@ void Pub_to_server(char* buf,char* Pubtopic)
 }
 
 
-//发送AT命令到NB模块
-//cmd——要发送的命令
-//ack——期待的回答
-//waittime——等待时间
-//返回值：成功返回0，失败返回1
-uint8_t BC260Y_send_cmd(char *cmd,char *ack,uint16_t waittime)
-{
-	uint8_t res=0; //函数返回值
-	if((uint32_t)cmd<=0XFF)//如果上一条指令没有发送完
-	{
-		while((USART2->SR&0X40)==0);//等待上一次数据发送完成  
-		USART2->DR=(uint32_t)cmd;
-	}
-	else send_to_BC260Y(cmd);    //发送命令
-	if(ack&&waittime)		         //需要等待应答
-	{
-		while(--waittime)	         //等待倒计时
-		{
-			delay_ms(50);
-			if(BC260_rec_flag==1)//如果接收到了应答
-			{
-				Usart2_Handle();
-				if(BC260Y_check_cmd(ack))//接收到期待的应答结果
-				{
-					printf("串口2接收(期待的应答结果)：\r\n%s",rx2_buffer);
-					clear_BUF(rx2_buffer);   //如果不是期待的应答结果，则清除接收数据
-//					res=0;
-//					break;//得到有效数据 ，则退出，并清除接收缓存，此时返回值为0
-					return 0;
-				}
-				else 
-				{
-					printf("串口2接收(不是期待的应答结果)：\r\n%s",rx2_buffer);
-					clear_BUF(rx2_buffer);   //如果不是期待的应答结果，则清除接收数据
-					res=1;
-					continue;//继续等
-				}
-			} 
-		}
-		if(waittime==0)res=1; //如果时间到了还没有等到期待的应答结果，则函数返回1
-	}
-	return res;
-}
-//给BC260Y发数据
-void send_to_BC260Y(char *pData)  
-{
-	uint16_t i=strlen((const char*)pData);       //i(此次发送数据的长度)
-	HAL_UART_Transmit(&huart2,(uint8_t*)pData,i,1000);
-	printf("USART2发送：%s\r\n",pData);  //串口1打印显示串口2发送的结果
-	Usart2_Handle();
-}
-
-
-//BC260Y发送命令后,检测接收到的应答
-//str:期待的应答结果
-//返回值:0,没有得到期待的应答结果
-//    其他,期待应答结果的位置(str的位置)
-uint8_t* BC260Y_check_cmd(char *str)
-{
-	char *strx=NULL;
-	if(BC260_rec_flag==1)		//接收到一次数据了
-	{ 
-		strx=strstr((const char*)rx2_buffer,(const char*)str);
-	} 
-	return (uint8_t*)strx;
-}
-
-
-//************************************************************************/
-
-
-
-
 //失败返回1，成功返回0
 int  BC260_send_cmd_LOOP(char* cmd,char* ack,uint16_t waittime,int loops,int err,char* errbuff)
 {
@@ -296,7 +232,7 @@ int otaCallback(const char* jsonString,struct aliyun* aliyun1)
     cJSON* root = cJSON_Parse(jsonString);
     if (root != NULL) {
         cJSON* code = cJSON_GetObjectItem(root, "code");
-        if (code != NULL && code->valueint == 200) {
+        if (code != NULL ) {
             // 提取数据并处理
             cJSON* data = cJSON_GetObjectItem(root, "data");
             if (data != NULL) {
@@ -382,7 +318,10 @@ int receiveMqttMessage(const char* message,struct aliyun* aliyun1)
 	{
 		printf("获取整包信息\r\n");
         if(otaCallback(payload,aliyun1)==0)
+		{
+			printf("未获取到整包信息\r\n");
 			return 0;
+		}
 		return 1;
     }
     else //其他信息
@@ -390,6 +329,7 @@ int receiveMqttMessage(const char* message,struct aliyun* aliyun1)
         printf("Unknown topic: %s\n\n", topic);
 		return 0;
     }
+	return 0;
 }
 //获取mqtt升级包信息
 //返回值 0未接收到数据包 1接收到数据包
@@ -397,7 +337,7 @@ int getMqttOtaDate( char* recbuff,char* productKey,char* deviceName,struct aliyu
 {
 
 	char topic_buff[100];
-	char send_buff[100];
+	char send_buff[120];
 //	//订阅响应主题
 //	sprintf(topic_buff,"/sys/%s/%s/thing/ota/firmware/get_reply",productKey,deviceName);
 //	MQTTSubTopic(send_buff);
@@ -416,19 +356,19 @@ int getMqttOtaDate( char* recbuff,char* productKey,char* deviceName,struct aliyu
 			if(receiveMqttMessage(recbuff,aliyun1))//有新固件
 			{
 				aliyun1->lastPackSize=(aliyun1->PacketSize%SIZE);//保存最后一包剩余字节数
-				if(aliyun1->PacketSize%SIZE!=0)
+				if(aliyun1->lastPackSize!=0)
 					aliyun1->PakeNum =(aliyun1->PacketSize/SIZE+1);//总包数
 				else
-					aliyun1->PakeNum =(aliyun1->PacketSize/256);
+				{
+					aliyun1->PakeNum =(aliyun1->PacketSize/SIZE);
+					aliyun1->lastPackSize=SIZE;
+				}
 					printf("共 %d 包数据，最后一包 %d 字节\r\n",aliyun1->PakeNum,aliyun1->lastPackSize);
 					return 1;
 			}
 		}
-		else
-		{
 		Usart2_Handle();
 		delay_ms(1000);
-		}
 	}
 	return 0;
 }
@@ -440,7 +380,8 @@ int getMqttOtaDate( char* recbuff,char* productKey,char* deviceName,struct aliyu
 //返回0表示接收成功，-1表示失败
 int downpack(int num ,char* buff,struct aliyun* aliyun1)
 {
-
+    short crc16IMB,rccrc16IMB;
+	char* crcPoint=NULL;
 	char sendbuff[200];
 	char topicbuff[100];
 	//获取第NUM包
@@ -451,7 +392,6 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 	aliyun1->streamId,SIZE,(num-1)*SIZE);
 	sprintf(topicbuff,"/sys/%s/%s/thing/file/download",USER_NAME,CLIENT_ID);
 	printf("获取第 %d 包\r\n",num);
-//	printf("%s %s\r\n",topicbuff,sendbuff);
 	Pub_to_server(sendbuff,topicbuff);
 	}
 	else if(num==aliyun1->PakeNum)////如果是最后一包,特殊处理
@@ -462,13 +402,13 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 	sprintf(topicbuff,"/sys/%s/%s/thing/file/download",USER_NAME,CLIENT_ID);
 	Pub_to_server(sendbuff,topicbuff);
 	printf("获取最后一包，第 %d 包\r\n",num);
-//	printf("%s %s\r\n",topicbuff,sendbuff);
 	}
 	
-	//CRC校验
-	int t=20;//每段数据等5秒
+	
+	int t=20;//每段数据最多等10秒
 	while(t--)
 	{
+		delay_ms(800);
 		if(t==0)
 		{
 		printf("等待超时\r\n");
@@ -476,13 +416,31 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 		}
 		unsigned char* p1;
 		if((unsigned char*)strstr(( const char*)rx2_buffer, "download_reply")!=NULL)
-	    { p1 = ((unsigned char*)strstr(( const char*)rx2_buffer, "download_reply"))+21;
+	    { 
+			p1 = ((unsigned char*)strstr(( const char*)rx2_buffer, "download_reply"))+21;
+			
 			for(int i=0;i<800;i++)
-			{printf("%c ",*(rx2_buffer+i));}
-		}//定位到代码位置
-		//
-		if(strstr(p1, "success")!=NULL)//接收到了数据
+			{printf("%c",*(rx2_buffer+i));}
+			if(num<aliyun1->PakeNum)
+			{
+				crcPoint=strstr((const char*)p1, "success")+9;//指向bin文件块起始位置
+				crc16IMB=CRC16_IBM((unsigned char *)crcPoint,SIZE);
+				memcpy(&rccrc16IMB,(unsigned char *)crcPoint+SIZE,sizeof(unsigned short));
+				printf("crc16IMB:%d\r\n",crc16IMB);
+				printf("rccrc16IMB:%d\r\n",rccrc16IMB);
+			}
+			else if(num==aliyun1->PakeNum)
+			{
+				crcPoint=strstr((const char*)p1, "success")+9;//指向bin文件块起始位置
+				crc16IMB=CRC16_IBM((unsigned char *)crcPoint,aliyun1->lastPackSize);
+				memcpy(&rccrc16IMB,(unsigned char *)crcPoint+aliyun1->lastPackSize,sizeof(unsigned short));
+				printf("crc16IMB:%d\r\n",crc16IMB);
+				printf("rccrc16IMB:%d\r\n",rccrc16IMB);
+			}
+		}//定位到bin文件存放位置
+		if(strstr((const char*)p1, "success")!=NULL&&(rccrc16IMB==crc16IMB))//接收到了数据
 		{
+//			
 			if(num==(aliyun1->PakeNum+1))//如果是最后一包,特殊处理
 			{
 			ota_write_appbin(ApplicationAddress+(num-1)*aliyun1->lastPackSize,(uint8_t*)p1,aliyun1->lastPackSize );
@@ -496,14 +454,83 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 			 aliyun1->WritePakeNum++;
 			 printf("写入第%d包\r\n",aliyun1->WritePakeNum);
 			 ota_write_appbin(ApplicationAddress+(num-1)*SIZE,(uint8_t*)p1,SIZE);
-			
 			 Usart2_Handle();
 			 return 1;
 			}
-		}
-		delay_ms(500);	
+		}	
     }
 	return 0;
 }
+
+
+//发送AT命令到NB模块
+//cmd——要发送的命令
+//ack——期待的回答
+//waittime——等待时间
+//返回值：成功返回0，失败返回1
+uint8_t BC260Y_send_cmd(char *cmd,char *ack,uint16_t waittime)
+{
+	uint8_t res=0; //函数返回值
+	if((uint32_t)cmd<=0XFF)//如果上一条指令没有发送完
+	{
+		while((USART2->SR&0X40)==0);//等待上一次数据发送完成  
+		USART2->DR=(uint32_t)cmd;
+	}
+	else send_to_BC260Y(cmd);    //发送命令
+	if(ack&&waittime)		         //需要等待应答
+	{
+		while(--waittime)	         //等待倒计时
+		{
+			delay_ms(50);
+			if(BC260_rec_flag==1)//如果接收到了应答
+			{
+				Usart2_Handle();
+				if(BC260Y_check_cmd(ack))//接收到期待的应答结果
+				{
+					printf("串口2接收(期待的应答结果)：\r\n%s",rx2_buffer);
+					clear_BUF(rx2_buffer);   //如果不是期待的应答结果，则清除接收数据
+					return 0;
+				}
+				else 
+				{
+					printf("串口2接收(不是期待的应答结果)：\r\n%s",rx2_buffer);
+					clear_BUF(rx2_buffer);   //如果不是期待的应答结果，则清除接收数据
+					res=1;
+					continue;//继续等
+				}
+			} 
+		}
+		if(waittime==0)res=1; //如果时间到了还没有等到期待的应答结果，则函数返回1
+	}
+	return res;
+}
+//给BC260Y发数据
+void send_to_BC260Y(char *pData)  
+{
+	uint16_t i=strlen((const char*)pData);       //i(此次发送数据的长度)
+	HAL_UART_Transmit(&huart2,(uint8_t*)pData,i,1000);
+	printf("USART2发送：%s\r\n",pData);  //串口1打印显示串口2发送的结果
+	Usart2_Handle();//发送完重新打开DMA接收
+}
+
+
+//BC260Y发送命令后,检测接收到的应答
+//str:期待的应答结果
+//返回值:0,没有得到期待的应答结果
+//    其他,期待应答结果的位置(str的位置)
+uint8_t* BC260Y_check_cmd(char *str)
+{
+	char *strx=NULL;
+	if(BC260_rec_flag==1)		//接收到一次数据了
+	{ 
+		strx=strstr((const char*)rx2_buffer,(const char*)str);
+	} 
+	return (uint8_t*)strx;
+}
+
+
+
+//************************************************************************/
+
 
 

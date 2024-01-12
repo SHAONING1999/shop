@@ -41,9 +41,9 @@ void ota_write_appbin(u32 appxaddr,u8 *appbuf,u32 appsize)
 			STMFLASH_Write(appxaddr,iapbuf,i);
 			
 		}
- }
  memset(iapbuf,0,sizeof(iapbuf));
 }
+ }
 
 typedef  void (*iapfun)(void);
 iapfun jump2app; 
@@ -54,3 +54,40 @@ void iap_interface_load_app(uint32_t appxaddr)
 	MSR_MSP(*(uint32_t*)appxaddr);					//初始化APP堆栈指针,对APP程序的堆栈进行重构,就是说重新分配RAM
 	jump2app();									//执行APP的复位中断函数,最终便会跳转到APP的main函数
 }
+
+//高低字节颠倒函数
+void InvertUint16(unsigned short* dBuf, unsigned short* srcBuf)
+{
+    int i;
+    unsigned short tmp[4] = { 0 };
+
+    for (i = 0; i < 16; i++)
+    {
+        if (srcBuf[0] & (1 << i))
+            tmp[0] |= 1 << (15 - i);
+    }	
+    dBuf[0] = tmp[0];
+}
+
+
+//CRC16-IBM函数
+unsigned short CRC16_IBM(unsigned char* data, unsigned int datalen)
+{
+    unsigned short wCRCin = 0x0000;
+    unsigned short wCPoly = 0x8005;
+
+    InvertUint16(&wCPoly, &wCPoly);
+    while (datalen--)
+    {
+        wCRCin ^= *(data++);
+        for (int i = 0; i < 8; i++)
+        {
+            if (wCRCin & 0x01)
+                wCRCin = (wCRCin >> 1) ^ wCPoly;
+            else
+                wCRCin = wCRCin >> 1;
+        }
+    }
+    return (wCRCin);
+}
+

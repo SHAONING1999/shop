@@ -6,12 +6,7 @@
 #define BC260Y_RX_BUF      USART2_RX_BUF
 #define BC260Y_RX_STA      USART2_RX_STA
 
-#define   HOST_NAME     "iot-as-mqtt.cn-shanghai.aliyuncs.com"        //服务器IP地址(mqtt固定)
-#define   HOST_PORT     "1883"                						  //阿里云  Mqtt 
-#define   USER_NAME     "a1SVuSaiVBK"               				  //产品ID
-#define   CLIENT_ID     "MN80808080800003"          				  //设备ID
-#define   PASSWORD      "57e4c89ce35385f33172703997d47dde"            //鉴权信息，设置为芯片序列号
-#define   SIZE         512            									  //分包大小
+        									  //分包大小
 
 
  struct aliyun
@@ -39,12 +34,12 @@ uint8_t MqttOnenet_Savedata(uint8_t *t_payload,uint8_t temp,uint8_t humi);
 char* Delete_Spac(char * buf);                          //去掉字符串中的空格,'/',':'
 
 void Pub_to_server(char* buf,char* topic);                  //给指定主题发布信息      
-uint8_t MQTTSubTopic(char* msg);              		 //订阅主题
-uint8_t MQTTUnSubTopic(char* UNSubTopic);
+int MQTTSubTopic(char* msg);              		 //订阅主题
+int MQTTUnSubTopic(char* UNSubTopic);
 void fileDownloadCallback(const char* jsonString,struct aliyun* aliyun1) ;
 int otaCallback(const char* jsonString,struct aliyun* aliyun1);
 int getMqttOtaDate( char* recbuff,char* productKey,char* deviceName,struct aliyun* aliyun1);
 int receiveMqttMessage(const char* message,struct aliyun* aliyun1);
 int downpack(int num ,char* buff,struct aliyun* aliyun1);
-uint8_t BC260_OTA(char* usart_buff,struct aliyun* MQTTaliyun);
+int BC260_OTA(char* usart_buff,struct aliyun* MQTTaliyun);
 #endif

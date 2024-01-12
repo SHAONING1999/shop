@@ -142,10 +142,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-//    if(rec1_end_flag)  //判断是否USART1接收到1帧数据
-//	{Usart1_Handle(); }	 //前往数据处理函数处理接收到的数据。
-//	if(rec2_end_flag)  //判断是否USART1接收到1帧数据
-//	{Usart2_Handle(); }	 //前往数据处理函数处理接收到的数据。
+    if(rec1_end_flag)  //判断是否USART1接收到1帧数据
+	{Usart1_Handle(); }	 //前往数据处理函数处理接收到的数据。
+	if(rec2_end_flag)  //判断是否USART1接收到1帧数据
+	{Usart2_Handle(); }	 //前往数据处理函数处理接收到的数据。
 //	HAL_IWDG_Refresh(&hiwdg);
     /* USER CODE BEGIN 3 */
   }
