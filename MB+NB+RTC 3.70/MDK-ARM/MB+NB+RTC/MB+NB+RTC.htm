@@ -3,7 +3,7 @@
 <title>Static Call Graph - [MB+NB+RTC\MB+NB+RTC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image MB+NB+RTC\MB+NB+RTC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Jan 06 10:43:28 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Jan 25 18:21:26 2024
 <BR><P>
 <H3>Maximum Stack Usage =       1952 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -879,7 +879,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[b1]"></a>Date_Report_tcp</STRONG> (Thumb, 3154 bytes, Stack size 176 bytes, freertos.o(i.Date_Report_tcp))
+<P><STRONG><a name="[b1]"></a>Date_Report_tcp</STRONG> (Thumb, 3170 bytes, Stack size 176 bytes, freertos.o(i.Date_Report_tcp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 888<LI>Call Chain = Date_Report_tcp &rArr; Test_4G_STA_TCP &rArr; parseGPSData &rArr; W25Q128_Write_float &rArr; W25QXX_Write &rArr; W25QXX_Write_NoCheck &rArr; W25QXX_Write_Page &rArr; W25QXX_Wait_Busy &rArr; W25QXX_ReadSR &rArr; SPI1_ReadWriteByte &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -2062,7 +2062,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[150]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sensor2_init
 </UL>
 
-<P><STRONG><a name="[6e]"></a>StartDefaultTask</STRONG> (Thumb, 366 bytes, Stack size 32 bytes, freertos.o(i.StartDefaultTask))
+<P><STRONG><a name="[6e]"></a>StartDefaultTask</STRONG> (Thumb, 370 bytes, Stack size 32 bytes, freertos.o(i.StartDefaultTask))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1952<LI>Call Chain = StartDefaultTask &rArr; Usart1_Handle &rArr; seekConfig &rArr; W25Q128_Read_float &rArr; W25QXX_Read &rArr; SPI1_ReadWriteByte &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -2317,7 +2317,7 @@ Global Symbols
 <P><STRONG><a name="[6]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.UsageFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[14b]"></a>Usart1_Handle</STRONG> (Thumb, 4154 bytes, Stack size 904 bytes, usart.o(i.Usart1_Handle))
+<P><STRONG><a name="[14b]"></a>Usart1_Handle</STRONG> (Thumb, 4184 bytes, Stack size 904 bytes, usart.o(i.Usart1_Handle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1920<LI>Call Chain = Usart1_Handle &rArr; seekConfig &rArr; W25Q128_Read_float &rArr; W25QXX_Read &rArr; SPI1_ReadWriteByte &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;W25QXX_Write
@@ -2761,7 +2761,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_FREERTOS_Init
 </UL>
 
-<P><STRONG><a name="[164]"></a>parseConfig</STRONG> (Thumb, 274 bytes, Stack size 208 bytes, edit.o(i.parseConfig))
+<P><STRONG><a name="[164]"></a>parseConfig</STRONG> (Thumb, 278 bytes, Stack size 208 bytes, edit.o(i.parseConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 488<LI>Call Chain = parseConfig &rArr; W25Q128_Write_float &rArr; W25QXX_Write &rArr; W25QXX_Write_NoCheck &rArr; W25QXX_Write_Page &rArr; W25QXX_Wait_Busy &rArr; W25QXX_ReadSR &rArr; SPI1_ReadWriteByte &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;W25QXX_Write
@@ -2817,7 +2817,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[18b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvInitialiseNewTask
 </UL>
 
-<P><STRONG><a name="[165]"></a>seekConfig</STRONG> (Thumb, 572 bytes, Stack size 832 bytes, edit.o(i.seekConfig))
+<P><STRONG><a name="[165]"></a>seekConfig</STRONG> (Thumb, 576 bytes, Stack size 832 bytes, edit.o(i.seekConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1016<LI>Call Chain = seekConfig &rArr; W25Q128_Read_float &rArr; W25QXX_Read &rArr; SPI1_ReadWriteByte &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay

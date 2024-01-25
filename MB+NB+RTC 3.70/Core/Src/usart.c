@@ -187,7 +187,7 @@ void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -752,6 +752,7 @@ void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 	p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+MES2=");//在字符串中寻找AT+MES=，找到后返回A的位置
 	if (p1 != NULL)
 	{
+		printf("%s",rx1_buffer);
 		struct senser  u1rsenser2; 
 		sscanf((const char*)p1,"AT+MES2=slave:%d;delay:%d;divenum:%d",&u1rsenser2.SlaveAddr,&u1rsenser2.Delays,&u1rsenser2.DivisorNum);	
 		printf("传感器2从机地址：%d,延时时间：%d,因子数量：%d\r\n",u1rsenser2.SlaveAddr,u1rsenser2.Delays,u1rsenser2.DivisorNum);
@@ -798,6 +799,7 @@ void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 	p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+MES1=");//在字符串中寻找AT+MES=，找到后返回A的位置
 	if (p1 != NULL)
 	{
+		printf("%s",rx1_buffer);
 		struct senser  u1rsenser1; 
 		sscanf((const char*)p1,"AT+MES1=slave:%d;delay:%d;divenum:%d",&senser1.SlaveAddr,&senser1.Delays,&senser1.DivisorNum);	
 		printf("传感器1从机地址：%d,延时时间：%d,因子数量：%d\r\n",senser1.SlaveAddr,senser1.Delays,senser1.DivisorNum);
@@ -1079,10 +1081,10 @@ void Usart1_Handle()     //USART1对接收的一帧数据进行处理
 	{
 	 parseConfig(( const char*)rx1_buffer);//配置信息解析并存储
 	}
-	p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+SEEK");//在字符串中寻找AT+GPS=，找到后返回A的位置
+	p1 = (unsigned char*)strstr(( const char*)rx1_buffer, "AT+SEEK");
 	if (p1 != NULL)
 	{
-	 seekConfig();
+	 seekConfig();//传感器配置
 	}
 	rx1_len = 0;//清除计数
 	rec1_end_flag = 0;//清除接收结束标志位

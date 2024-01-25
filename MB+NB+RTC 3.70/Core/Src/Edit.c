@@ -530,7 +530,6 @@ int seekConfig()
 	seekconfig.AGPS,seekconfig.STATE,seekconfig.card_nb,seekconfig.card_4g,(Date.Year-48),Date.Month ,Date.Date ,Time.Hours ,Time.Minutes ,Time.Seconds,VERSION);
     printf("%s",sendbuff);
 	
-	
 }
 
 
