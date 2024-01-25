@@ -1,7 +1,7 @@
 Dependencies for Project 'BOOTLOADER1', Target 'BOOTLOADER1': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::.\ARMCC
 F (startup_stm32f407xx.s)(0x659FF4F3)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 530" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o bootloader1\startup_stm32f407xx.o --depend bootloader1\startup_stm32f407xx.d)
-F (../Core/Src/main.c)(0x65A103A8)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\main.o --omf_browse bootloader1\main.crf --depend bootloader1\main.d)
+F (../Core/Src/main.c)(0x65B25692)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\main.o --omf_browse bootloader1\main.crf --depend bootloader1\main.d)
 I (../Core/Inc/main.h)(0x6598CC51)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x6594B4FF)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x6597B6A3)
@@ -47,10 +47,10 @@ I (E:\MDK\ARM\ARMCC\include\stdio.h)(0x5E53505C)
 I (E:\MDK\ARM\ARMCC\include\string.h)(0x5E53505C)
 I (../Core/Inc/gpio.h)(0x6597B6A0)
 I (../Core/Inc/delay.h)(0x65892D9C)
-I (../Core/Inc/w25qxx.h)(0x6594C5BC)
+I (../Core/Inc/w25qxx.h)(0x65B21B1B)
 I (../Core/Inc/sys.h)(0x6595417F)
 I (../Core/Inc/flash.h)(0x659CB3DC)
-I (../Core/Inc/ota.h)(0x65A0E89E)
+I (../Core/Inc/ota.h)(0x65B24F20)
 I (../Core/Inc/NBiot.h)(0x65A0952F)
 I (..\Core\Inc\IAP\menu.h)(0x6594B4E1)
 I (..\Core\Inc\IAP\flash_if.h)(0x659CB38B)
@@ -279,7 +279,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x6594B4FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x6594B4FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x6594B4FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x6594B4FF)
-F (../Core/Src/usart.c)(0x65A0EF75)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\usart.o --omf_browse bootloader1\usart.crf --depend bootloader1\usart.d)
+F (../Core/Src/usart.c)(0x65B21C48)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\usart.o --omf_browse bootloader1\usart.crf --depend bootloader1\usart.d)
 I (../Core/Inc/usart.h)(0x659E7377)
 I (../Core/Inc/main.h)(0x6598CC51)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x6594B4FF)
@@ -321,7 +321,7 @@ I (E:\MDK\ARM\ARMCC\include\string.h)(0x5E53505C)
 I (E:\MDK\ARM\ARMCC\include\stdlib.h)(0x5E53505C)
 I (../Core/Inc/rtc.h)(0x6597B6A2)
 I (../Core/Inc/spi.h)(0x6598BAE9)
-I (../Core/Inc/ota.h)(0x65A0E89E)
+I (../Core/Inc/ota.h)(0x65B24F20)
 I (../Core/Inc/sys.h)(0x6595417F)
 I (../Core/Inc/flash.h)(0x659CB3DC)
 I (..\Core\Inc\IAP\menu.h)(0x6594B4E1)
@@ -442,7 +442,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x6594B4FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x6594B4FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x6594B4FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x6594B4FF)
-F (..\Core\Src\ota.c)(0x65A0ECD3)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\ota.o --omf_browse bootloader1\ota.crf --depend bootloader1\ota.d)
+F (..\Core\Src\ota.c)(0x65B25232)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\ota.o --omf_browse bootloader1\ota.crf --depend bootloader1\ota.d)
 I (../Core/Inc/sys.h)(0x6595417F)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x6594B4D2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x6594B4D2)
@@ -484,8 +484,9 @@ I (../Core/Inc/usart.h)(0x659E7377)
 I (E:\MDK\ARM\ARMCC\include\stdio.h)(0x5E53505C)
 I (E:\MDK\ARM\ARMCC\include\string.h)(0x5E53505C)
 I (../Core/Inc/flash.h)(0x659CB3DC)
-I (../Core/Inc/ota.h)(0x65A0E89E)
-F (..\Core\Src\sys.c)(0x659CCE41)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\sys.o --omf_browse bootloader1\sys.crf --depend bootloader1\sys.d)
+I (../Core/Inc/ota.h)(0x65B24F20)
+I (../Core/Inc/w25qxx.h)(0x65B21B1B)
+F (..\Core\Src\sys.c)(0x65B230AC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\sys.o --omf_browse bootloader1\sys.crf --depend bootloader1\sys.d)
 I (../Core/Inc/sys.h)(0x6595417F)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x6594B4D2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x6594B4D2)
@@ -527,8 +528,8 @@ I (E:\MDK\ARM\ARMCC\include\stdio.h)(0x5E53505C)
 I (E:\MDK\ARM\ARMCC\include\string.h)(0x5E53505C)
 I (../Core/Inc/dma.h)(0x6597B6A1)
 I (../Core/Inc/spi.h)(0x6598BAE9)
-F (..\Core\Src\w25qxx.c)(0x6597EB68)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\w25qxx.o --omf_browse bootloader1\w25qxx.crf --depend bootloader1\w25qxx.d)
-I (../Core/Inc/w25qxx.h)(0x6594C5BC)
+F (..\Core\Src\w25qxx.c)(0x65B1BD5B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\w25qxx.o --omf_browse bootloader1\w25qxx.crf --depend bootloader1\w25qxx.d)
+I (../Core/Inc/w25qxx.h)(0x65B21B1B)
 I (../Core/Inc/main.h)(0x6598CC51)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x6594B4FF)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x6597B6A3)
@@ -611,7 +612,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x6594B4FF)
 I (..\Core\Inc\IAP\flash_if.h)(0x659CB38B)
 I (../Core/Inc/delay.h)(0x65892D9C)
 I (../Core/Inc/main.h)(0x6598CC51)
-F (..\Core\Src\NBiot.c)(0x65A10500)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\nbiot.o --omf_browse bootloader1\nbiot.crf --depend bootloader1\nbiot.d)
+F (..\Core\Src\NBiot.c)(0x65B24FFD)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\nbiot.o --omf_browse bootloader1\nbiot.crf --depend bootloader1\nbiot.d)
 I (../Core/Inc/NBiot.h)(0x65A0952F)
 I (../Core/Inc/usart.h)(0x659E7377)
 I (../Core/Inc/main.h)(0x6598CC51)
@@ -653,10 +654,10 @@ I (E:\MDK\ARM\ARMCC\include\stdio.h)(0x5E53505C)
 I (E:\MDK\ARM\ARMCC\include\string.h)(0x5E53505C)
 I (E:\MDK\ARM\ARMCC\include\stdlib.h)(0x5E53505C)
 I (../Core/Inc/delay.h)(0x65892D9C)
-I (../Core/Inc/w25qxx.h)(0x6594C5BC)
+I (../Core/Inc/w25qxx.h)(0x65B21B1B)
 I (../Core/Inc/rtc.h)(0x6597B6A2)
 I (../Core/Inc/cjson.h)(0x658A3964)
-I (../Core/Inc/ota.h)(0x65A0E89E)
+I (../Core/Inc/ota.h)(0x65B24F20)
 I (../Core/Inc/sys.h)(0x6595417F)
 I (../Core/Inc/flash.h)(0x659CB3DC)
 F (..\Core\Src\cJSON.c)(0x659E3860)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\cjson.o --omf_browse bootloader1\cjson.crf --depend bootloader1\cjson.d)
@@ -1528,7 +1529,7 @@ I (..\Core\Inc\IAP\ymodem.h)(0x6594B4E1)
 I (../Core/Inc/usart.h)(0x659E7377)
 I (E:\MDK\ARM\ARMCC\include\stdio.h)(0x5E53505C)
 I (E:\MDK\ARM\ARMCC\include\string.h)(0x5E53505C)
-I (../Core/Inc/ota.h)(0x65A0E89E)
+I (../Core/Inc/ota.h)(0x65B24F20)
 I (../Core/Inc/sys.h)(0x6595417F)
 I (../Core/Inc/flash.h)(0x659CB3DC)
 F (..\Core\Src\IAP\ymodem.c)(0x659C0246)(--c99 -c --cpu Cortex-M4.fp.sp -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Inc\IAP -I ..\STM324xG_EVAL-I.\RTE\_BOOTLOADER1-IE:\MDK\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\MDK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="530" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o bootloader1\ymodem.o --omf_browse bootloader1\ymodem.crf --depend bootloader1\ymodem.d)

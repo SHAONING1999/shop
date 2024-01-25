@@ -18,7 +18,7 @@
 #define   USER_NAME     "a1SVuSaiVBK"               				  //产品ID
 #define   CLIENT_ID     "MN80808080800003"          				  //设备ID
 #define   PASSWORD      "57e4c89ce35385f33172703997d47dde"            //鉴权信息，设置为芯片序列号
-#define   SIZE        	 256    									  //分包大小（字节）
+#define   SIZE        	 512    									  //分包大小（字节）
 /******************    芯片型号：BC260Y    *********************/
 //     波特率：15200
 //     接串口:USART2
@@ -41,21 +41,32 @@ int BC260_OTA(char* usart_buff,struct aliyun* aliyun1)
 		return -1;
 	}
 	//获取更新信息
+	Usart2_Handle();
 	if(getMqttOtaDate(usart_buff,USER_NAME,CLIENT_ID,aliyun1))
 	{
+		int size=0;
 		aliyun1->WritePakeNum=0;
-		printf("检测到新固件，开始下载新固件\r\n");
+		printf("检测到新固件\r\n");
+		set_app2w25q128_backups(ApplicationAddress,W25QXX_BACKUP_ADDR);//读取固件备份到外部flash
+		printf("开始下载新固件\r\n");
 		for(int num=1;num<=(aliyun1->PakeNum);num++)
 		{
           //获取第num包，起始地址为256*(num-1)
 			
-			downpack(num,usart_buff,aliyun1);
+			if(downpack(num,usart_buff,aliyun1)!=1)
+			{
+				printf("下载新固件失败,进行版本回溯\r\n");
+				set_app2stm32_backups(ApplicationAddress,W25QXX_BACKUP_ADDR);//搬运w25q128中的代码到是stm32中
+				printf("旧固件程序跳转\r\n");
+				iap_interface_close_all_interrupt();//关闭所有中断  
+				iap_interface_load_app(ApplicationAddress);//APP程序跳转
+			}
 		}
 		if(aliyun1->WritePakeNum==aliyun1->PakeNum)
 		{
-		printf("新固件更新完毕，启动APP程序\r\n");
-		iap_interface_close_all_interrupt();//关闭所有中断  
-		iap_interface_load_app(ApplicationAddress);//APP程序跳转
+			printf("新固件更新完毕，启动APP程序\r\n");
+			iap_interface_close_all_interrupt();//关闭所有中断  
+			iap_interface_load_app(ApplicationAddress);//APP程序跳转
 		}
 	}
 	else//没有更新信息
@@ -160,7 +171,7 @@ int MQTTSubTopic(char* SubTopic)
 	char topic_buff[80];
 	sprintf(topic_buff,"AT+QMTSUB=0,1,\"%s\",0\r\n",SubTopic);
 	if(BC260Y_send_cmd(topic_buff, "+QMTSUB",100))	
-	return -1;
+		return -1;
 	
 	return 0;
 }
@@ -349,9 +360,10 @@ int getMqttOtaDate( char* recbuff,char* productKey,char* deviceName,struct aliyu
 	int time=5;
 	while(time--)
 	{
+		delay_ms(1000);
 		if(time==0)
 			return 0;
-		if(BC260_rec_flag==1&&strstr(recbuff,"streamId")!=NULL )
+		if(strstr(recbuff,"streamId")!=NULL )
 		{
 			if(receiveMqttMessage(recbuff,aliyun1))//有新固件
 			{
@@ -368,7 +380,6 @@ int getMqttOtaDate( char* recbuff,char* productKey,char* deviceName,struct aliyu
 			}
 		}
 		Usart2_Handle();
-		delay_ms(1000);
 	}
 	return 0;
 }
@@ -391,7 +402,7 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 	"{ \"id\": \"2331\",\"version\": \"1.0\",\"params\": {\"fileInfo\":{\"streamId\":%d,\"fileId\":1},\"fileBlock\":{\"size\":%d,\"offset\":%d }}}",
 	aliyun1->streamId,SIZE,(num-1)*SIZE);
 	sprintf(topicbuff,"/sys/%s/%s/thing/file/download",USER_NAME,CLIENT_ID);
-	printf("获取第 %d 包\r\n",num);
+	printf("\r\n剩余 %d 包\r\n",aliyun1->PakeNum-num);
 	Pub_to_server(sendbuff,topicbuff);
 	}
 	else if(num==aliyun1->PakeNum)////如果是最后一包,特殊处理
@@ -419,15 +430,15 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 	    { 
 			p1 = ((unsigned char*)strstr(( const char*)rx2_buffer, "download_reply"))+21;
 			
-			for(int i=0;i<800;i++)
+			for(int i=0;i<(SIZE+200);i++)
 			{printf("%c",*(rx2_buffer+i));}
 			if(num<aliyun1->PakeNum)
 			{
 				crcPoint=strstr((const char*)p1, "success")+9;//指向bin文件块起始位置
 				crc16IMB=CRC16_IBM((unsigned char *)crcPoint,SIZE);
 				memcpy(&rccrc16IMB,(unsigned char *)crcPoint+SIZE,sizeof(unsigned short));
-				printf("crc16IMB:%d\r\n",crc16IMB);
-				printf("rccrc16IMB:%d\r\n",rccrc16IMB);
+				printf("\r\ncrc16IMB:%d\r\n",crc16IMB);
+				printf("\r\nrccrc16IMB:%d\r\n",rccrc16IMB);
 			}
 			else if(num==aliyun1->PakeNum)
 			{
@@ -436,6 +447,11 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 				memcpy(&rccrc16IMB,(unsigned char *)crcPoint+aliyun1->lastPackSize,sizeof(unsigned short));
 				printf("crc16IMB:%d\r\n",crc16IMB);
 				printf("rccrc16IMB:%d\r\n",rccrc16IMB);
+				if(rccrc16IMB!=crc16IMB)
+				{
+					printf("第%d包CRC校验异常\r\n",num);
+					return 0;
+				}
 			}
 		}//定位到bin文件存放位置
 		if(strstr((const char*)p1, "success")!=NULL&&(rccrc16IMB==crc16IMB))//接收到了数据
@@ -447,6 +463,7 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 			aliyun1->WritePakeNum++;	
 			printf("写入最后一包,即将跳转APP程序\r\n");
 			Usart2_Handle();
+			W25QXX_Write((uint8_t*)&aliyun1->PacketSize,APP_SIZE_ADDR,sizeof(int)); //更新APP大小
 			return 1;
 			}
 			else//不是最后一包
@@ -458,6 +475,7 @@ int downpack(int num ,char* buff,struct aliyun* aliyun1)
 			 return 1;
 			}
 		}	
+
     }
 	return 0;
 }

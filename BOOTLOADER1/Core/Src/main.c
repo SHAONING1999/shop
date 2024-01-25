@@ -113,7 +113,9 @@ int main(void)
   MX_TIM5_Init();
   MX_UART5_Init();
   MX_USART6_UART_Init();
+
   /* USER CODE BEGIN 2 */
+    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0, GPIO_PIN_SET);
   	 int iwdg_flag=1;
 	 W25QXX_Read((uint8_t*)&iwdg_flag, IWDG_ADDR, sizeof(int));
 	 if(iwdg_flag!=0)
@@ -127,6 +129,8 @@ int main(void)
   	HAL_UART_Receive_DMA(&huart1,rx1_buffer,BUFFER_SIZE);  //开启DMA接收
 	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
   	HAL_UART_Receive_DMA(&huart2,rx2_buffer,BUFFER_SIZE);  //开启DMA接收
+//	  iap_interface_close_all_interrupt();//关闭所有中断  
+//		iap_interface_load_app(ApplicationAddress);//APP程序跳转
 	  BC260_OTA((char*)rx2_buffer,&MQTTaliyun);
 //    iap_interface_close_all_interrupt();	  
 //    printf("bootloader跳转APP\r\n");

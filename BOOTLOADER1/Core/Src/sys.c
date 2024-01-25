@@ -99,7 +99,7 @@ void iap_interface_close_all_interrupt(void)
 	SysTick->VAL=0x00;
 	HAL_NVIC_DisableIRQ(USART1_IRQn);
 	
-	HAL_NVIC_DisableIRQ(USART2_IRQn);
+//	HAL_NVIC_DisableIRQ(USART2_IRQn);
 //	__HAL_RCC_USART2_CLK_DISABLE();
 	
 //	__HAL_RCC_USART6_CLK_DISABLE();

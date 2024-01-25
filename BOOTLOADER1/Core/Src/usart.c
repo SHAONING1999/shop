@@ -36,7 +36,7 @@
 
 volatile uint8_t BC260_rec_flag = 0; //BC260一帧数据接收完成标志
 volatile uint8_t EC20_rec_flag = 0; //BC260一帧数据接收完成标志
-static void IAP_Init(void);
+//static void IAP_Init(void);
 //串口1（蓝牙）（调试口）
 
 volatile int rx1_len = 0;  //USART1接收一帧数据的长度

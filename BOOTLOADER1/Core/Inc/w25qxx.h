@@ -68,30 +68,36 @@ extern uint16_t W25QXX_TYPE;					//定义W25QXX芯片型号
 
 //数据保存地址
 #define FLASH_SIZE	16*1024*1024//flash容量16M
+#define   W25QXX_BACKUP_ADDR        	 0    									  //备份分包大小（字节）
 #define REISSUE_MESSAGE_ADDR	FLASH_SIZE-8388608//补发数据保存地址
-#define LONGITUDE_ADDR		FLASH_SIZE-520//经度信息保存地址
-#define LATITUDE_ADDR		FLASH_SIZE-510//纬度信息保存地址
-#define AGPS_ADDR			FLASH_SIZE-500//GPS开关控制保存地址
-#define MESS_ADDR		    100// 报文信息保存地址
-#define Datewritepage_ADDR	20//写入数据页数数据的保存地址
-#define SamplingTime_ADDR	10//采样周期的保存地址
-#define Reportingtime_ADDR	0//上报周期的保存地址
-#define IP_ADDR				FLASH_SIZE-100//ip地址的保存地址
-#define PORT_ADDR			FLASH_SIZE-50//端口号保存地址
-#define PWR_Tvalue_ADDR		FLASH_SIZE-40//电池低电压报警阈值保存地址
-#define REISSUE_PAG_ADDR	FLASH_SIZE-700//数据补发页数保存地址
-#define MONITOR_ADDR		FLASH_SIZE-690//数据补发页数保存地址
-#define IWDG_ADDR			FLASH_SIZE-680////看门狗标志位保存地址
-#define COMMOD_ADDR			FLASH_SIZE-660////看门狗标志位保存地址
-#define MN_ADDR				FLASH_SIZE-650////设备MN号保存地址
+
+#define SNE1DATE_ADDR		    FLASH_SIZE-4000// 传感器1配置信息保存地址
+#define SNE2DATE_ADDR		    FLASH_SIZE-2500// 传感器2配置信息保存地址
+
+#define BC260_CMMI_ADDR			FLASH_SIZE-800//设备NB物联网卡号保存地址
+#define EC20_CMMI_ADDR			FLASH_SIZE-770//设备4G物联网卡号保存地址
+#define REISSUE_PAG_ADDR		FLASH_SIZE-700//数据补发页数保存地址
+#define MONITOR_ADDR			FLASH_SIZE-690//监控模式flag
+#define IWDG_ADDR				FLASH_SIZE-680////看门狗标志位保存地址
+#define COMMOD_ADDR				FLASH_SIZE-660////通讯模式标志位保存地址
+#define MN_ADDR					FLASH_SIZE-650////设备MN号保存地址
 #define WORK_STATE_ADDR			FLASH_SIZE-590//设备故障码保存地址
 #define BOAUD1_RATE_ADDR		FLASH_SIZE-585//设备1波特率保存地址
 #define BOAUD2_RATE_ADDR		FLASH_SIZE-580//设备2波特率保存地址
-#define SENSORNUM_ADDR		FLASH_SIZE-570//传感器个数保存地址
-#define BC260_CMMI_ADDR			FLASH_SIZE-800//设备NB物联网卡号保存地址
-#define EC20_CMMI_ADDR			FLASH_SIZE-770//设备4G物联网卡号保存地址
-#define SNE1DATE_ADDR		    FLASH_SIZE-4000// 报文信息保存地址
-#define SNE2DATE_ADDR		    FLASH_SIZE-2500// 报文信息保存地址
+#define SENSORNUM_ADDR			FLASH_SIZE-570//传感器个数保存地址
+#define LONGITUDE_ADDR			FLASH_SIZE-520//经度信息保存地址
+#define LATITUDE_ADDR			FLASH_SIZE-510//纬度信息保存地址
+#define AGPS_ADDR				FLASH_SIZE-500//GPS开关控制保存地址
+#define IP_ADDR					FLASH_SIZE-100//ip地址的保存地址
+#define APP_SIZE_ADDR		    FLASH_SIZE-70// APP程序大小保存地址
+#define PORT_ADDR				FLASH_SIZE-50//端口号保存地址
+#define PWR_Tvalue_ADDR			FLASH_SIZE-40//电池低电压报警阈值保存地址
+#define Datewritepage_ADDR		FLASH_SIZE-20//写入数据页数数据的保存地址
+#define SamplingTime_ADDR		FLASH_SIZE-10//采样周期的保存地址
+#define Reportingtime_ADDR		FLASH_SIZE-6//上报周期的保存地址
+
+
+
 
 void W25QXX_Init(void);
 uint16_t  W25QXX_ReadID(void);  	    		//读取FLASH ID

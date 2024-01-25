@@ -42,3 +42,4 @@ bootloader1\ota.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdio.h
 bootloader1\ota.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
 bootloader1\ota.o: ../Core/Inc/flash.h
 bootloader1\ota.o: ../Core/Inc/ota.h
+bootloader1\ota.o: ../Core/Inc/w25qxx.h

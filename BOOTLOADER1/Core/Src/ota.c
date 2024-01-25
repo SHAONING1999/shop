@@ -3,8 +3,10 @@
 #include "usart.h"
 #include "flash.h"
 #include "ota.h" 
-
-
+#include "w25qxx.h" 
+#pragma diag_suppress 870 //屏蔽中文乱码警告
+#define   BACKUP_SIZE        	         	 512    							//备份分包大小（字节）
+#define   BACKUP_TOTALSIZE        	         64*1024							//APP程序最大大小64K
 u32 iapbuf[512]; 	//2K字节缓存  
 //appxaddr:应用程序的起始地址
 //appbuf:应用程序CODE.
@@ -91,3 +93,71 @@ unsigned short CRC16_IBM(unsigned char* data, unsigned int datalen)
     return (wCRCin);
 }
 
+//从指定地址读取当前程序大小
+////参数 ：
+//appsizeaddr APP程序大小存放地址
+	
+
+
+
+//把当前程序备份到外部flash
+//参数 ：
+//start_addr 	APP程序起始地址
+//backup_addr	外部falsh备份起始地址
+//size 			备份程序大小
+int set_app2w25q128_backups(uint32_t appstart_addr,uint32_t backup_addr)
+{	
+//	int totalsize;
+//	W25QXX_Read((uint8_t*)&size, APP_SIZE_ADDR, sizeof(int));//获取目前固件大小，以读取备份
+	printf(" 开始备份固件，大小为%d字节\r\n",BACKUP_TOTALSIZE);
+	//计算写入次数
+	uint32_t backupbuff32[128];
+	uint8_t backupbuff8[512];
+	int num=0;
+	num=(BACKUP_TOTALSIZE/BACKUP_SIZE);
+	printf(" 共%d包\r\n",num);
+	for(int i=1;i<=num;i++)
+	{
+	//从内部flash读取程序数据
+	printf(" \r\n备份第%d包\r\n",i);
+	STMFLASH_Read(appstart_addr+(i-1)*BACKUP_SIZE,backupbuff32,BACKUP_SIZE/4);
+	//把4字节转化为1字节
+	memcpy(backupbuff8,backupbuff32,BACKUP_SIZE);
+	//写入外部flash
+	W25QXX_Write(backupbuff8,backup_addr+(i-1)*BACKUP_SIZE,BACKUP_SIZE);
+	for(int t=0;t<BACKUP_SIZE;t++)
+	{printf(" 0x%02X",*(backupbuff8+t));}
+	}
+	printf("\r\n固件备份成功\r\n");
+	return 1;
+}
+
+//把外部flash的备份程序写到内部flash
+//参数 ：
+//start_addr 	APP程序起始地址
+//backup_addr	外部falsh备份起始地址
+int set_app2stm32_backups(uint32_t appstart_addr,uint32_t backup_addr)
+{	
+//	int totalsize;
+//	W25QXX_Read((uint8_t*)&size, APP_SIZE_ADDR, sizeof(int));//获取目前固件大小，以读取备份
+	printf(" 开始回溯固件，大小为%d字节\r\n",BACKUP_TOTALSIZE);
+	uint32_t backupbuff32[128];
+	uint8_t  backupbuff8[512];
+	int num=0;
+	num=(BACKUP_TOTALSIZE/BACKUP_SIZE);
+	printf(" 共%d包\r\n",num);
+	for(int i=1;i<=num;i++)
+	{
+	//从内部flash读取程序数据
+	printf(" \r\n回溯写入第%d包\r\n",i);
+	W25QXX_Read(backupbuff8,backup_addr+(i-1)*BACKUP_SIZE,BACKUP_SIZE);
+	for(int t=0;t<BACKUP_SIZE;t++)
+	{printf(" 0x%02X",*(backupbuff8+t));}
+	//把4字节转化为1字节
+	memcpy(backupbuff32,backupbuff8,BACKUP_SIZE);
+	//写入内部flash
+	STMFLASH_Write(appstart_addr+(i-1)*BACKUP_SIZE,backupbuff32,BACKUP_SIZE/4);
+	}
+	printf("\r\n固件回溯成功\r\n");
+	return 1;
+}
