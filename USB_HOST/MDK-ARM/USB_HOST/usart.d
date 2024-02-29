@@ -32,3 +32,6 @@ usb_host\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 usb_host\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 usb_host\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h
 usb_host\usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
+usb_host\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
+usb_host\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
+usb_host\usart.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdio.h

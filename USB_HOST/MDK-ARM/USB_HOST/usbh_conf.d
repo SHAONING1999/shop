@@ -41,3 +41,5 @@ usb_host\usbh_conf.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ior
 usb_host\usbh_conf.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h
 usb_host\usbh_conf.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_pipes.h
 usb_host\usbh_conf.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ctlreq.h
+usb_host\usbh_conf.o: ../USB_HOST/Target/usbh_platform.h
+usb_host\usbh_conf.o: ../USB_HOST/App/usb_host.h

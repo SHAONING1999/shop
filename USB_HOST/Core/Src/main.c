@@ -59,6 +59,63 @@ void MX_USB_HOST_Process(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+
+extern ApplicationTypeDef Appli_state;
+extern USBH_HandleTypeDef hUsbHostFS;
+extern char USBHPath[4]; // USBH logical drive path
+ 
+FATFS FatfsUDisk; // File system object for USB disk logical drive
+FIL myFile; // File object
+ //U≈Ã”¶”√∫Ø ˝
+static void MSC_Application(void)
+{
+    FRESULT fres; // FatFs function common result code
+    uint32_t byteswrite;
+	uint32_t bytesread;
+    uint8_t str[] = "hello world!";
+	uint8_t datebuff[1024];
+    /* Register the file system object to the FatFs module */
+    if( f_mount(&FatfsUDisk, (TCHAR const*)USBHPath, 0) != FR_OK)
+    {
+        Error_Handler(); //FatFs Initialization Error
+    }
+    else
+    {
+		 if(f_open(&myFile, "APP.bin",  FA_READ) != FR_OK)
+        {
+            Error_Handler(); //'STM32.TXT' file Open for write Error
+        }
+		  else
+		{
+			fres = f_read(&myFile, datebuff, 1024, (void *)&bytesread);
+			for(int i=0;i<1023;i++)
+			printf("0x%02X ",datebuff[i]);
+		}
+		
+        /* Create and Open a new text file object with write access */
+//        if(f_open(&myFile, "test.txt", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+//        {
+//            Error_Handler(); //'STM32.TXT' file Open for write Error
+//        }
+//        else
+//        {
+//            fres = f_write(&myFile, str, sizeof(str), (void *)&byteswrite);
+//            if(byteswrite == 0 || (fres != FR_OK))
+//            {
+//                Error_Handler();
+//            }
+//            else
+//            {
+//                f_close(&myFile); //Close the open text file
+//            }
+//        }
+    }
+}
+
+
+
+
+
 /* USER CODE END 0 */
 
 /**
@@ -90,21 +147,37 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-  MX_FATFS_Init();
   MX_USB_HOST_Init();
+  MX_USART6_UART_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
-
+ printf("bootloader£°\r\n");
+ 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
-  }
+   switch(Appli_state)
+    {
+        case APPLICATION_READY:
+            MSC_Application();
+            Appli_state = APPLICATION_DISCONNECT;
+            break;
+        case APPLICATION_DISCONNECT:
+            f_mount(NULL, "", 0);
+            break;
+        default:
+            break;
+    }
+ }
+
   /* USER CODE END 3 */
 }
 
@@ -129,8 +202,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 336;
+  RCC_OscInitStruct.PLL.PLLM = 4;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)

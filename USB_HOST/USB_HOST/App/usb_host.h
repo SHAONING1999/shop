@@ -31,7 +31,7 @@
 #include "stm32f4xx_hal.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+void McUsbDataProcess(void);
 /* USER CODE END INCLUDE */
 
 /** @addtogroup USBH_OTG_DRIVER

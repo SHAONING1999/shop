@@ -46,7 +46,16 @@ ApplicationTypeDef Appli_state = APPLICATION_IDLE;
  * -- Insert your variables declaration here --
  */
 /* USER CODE BEGIN 0 */
-
+ void MSC_Application(void)
+ {
+	 printf("U盘插入！\r\n");
+	 
+	 printf("U盘文件读取！\r\n");
+	 
+	 printf("U盘文件搬运\r\n");
+	 
+	 printf("新程序跳转\r\n");
+ }
 /* USER CODE END 0 */
 
 /*
@@ -58,6 +67,39 @@ static void USBH_UserProcess(USBH_HandleTypeDef *phost, uint8_t id);
  * -- Insert your external function declaration here --
  */
 /* USER CODE BEGIN 1 */
+///* USB通讯数据处理 */
+//void McUsbDataProcess(void)
+//{
+//  /* USB 主机过程：应在主循环中调用，运行主机协议栈 */
+//  USBH_Process(&hUsbHostFS);
+//  
+//  switch(Appli_state)
+//  {
+//  case APPLICATION_START:
+//    {
+//      break;
+//    }
+//  case APPLICATION_READY:
+//    {
+//      MSC_Application();//U盘读写任务
+//      Appli_state = APPLICATION_IDLE;
+//      break;
+//    }
+//  case APPLICATION_DISCONNECT:
+//    {
+//      break;
+//    }
+//  case APPLICATION_IDLE:
+//    {
+//      break;
+//    }
+//  default:
+//    {
+//      break; 
+//    }
+//  }
+//}
+
 
 /* USER CODE END 1 */
 
@@ -98,6 +140,7 @@ void MX_USB_HOST_Process(void)
   USBH_Process(&hUsbHostFS);
 }
 /*
+
  * user callback definition
  */
 static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
@@ -106,20 +149,24 @@ static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
   switch(id)
   {
   case HOST_USER_SELECT_CONFIGURATION:
+	printf("HOST_USER_SELECT_CONFIGURATION\r\n");
   break;
-
+ 
   case HOST_USER_DISCONNECTION:
   Appli_state = APPLICATION_DISCONNECT;
+	printf("Appli_state = APPLICATION_DISCONNECT\r\n");
   break;
-
+ 
   case HOST_USER_CLASS_ACTIVE:
   Appli_state = APPLICATION_READY;
+	printf("Appli_state = APPLICATION_READY\r\n");
   break;
-
+ 
   case HOST_USER_CONNECTION:
   Appli_state = APPLICATION_START;
+	printf("Appli_state = APPLICATION_START\r\n");
   break;
-
+ 
   default:
   break;
   }
