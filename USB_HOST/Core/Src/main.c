@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "menu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,50 +67,50 @@ extern char USBHPath[4]; // USBH logical drive path
 FATFS FatfsUDisk; // File system object for USB disk logical drive
 FIL myFile; // File object
  //U≈Ã”¶”√∫Ø ˝
-static void MSC_Application(void)
-{
-    FRESULT fres; // FatFs function common result code
-    uint32_t byteswrite;
-	uint32_t bytesread;
-    uint8_t str[] = "hello world!";
-	uint8_t datebuff[1024];
-    /* Register the file system object to the FatFs module */
-    if( f_mount(&FatfsUDisk, (TCHAR const*)USBHPath, 0) != FR_OK)
-    {
-        Error_Handler(); //FatFs Initialization Error
-    }
-    else
-    {
-		 if(f_open(&myFile, "APP.bin",  FA_READ) != FR_OK)
-        {
-            Error_Handler(); //'STM32.TXT' file Open for write Error
-        }
-		  else
-		{
-			fres = f_read(&myFile, datebuff, 1024, (void *)&bytesread);
-			for(int i=0;i<1023;i++)
-			printf("0x%02X ",datebuff[i]);
-		}
-		
-        /* Create and Open a new text file object with write access */
-//        if(f_open(&myFile, "test.txt", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+//static void MSC_Application(void)
+//{
+//    FRESULT fres; // FatFs function common result code
+//    uint32_t byteswrite;
+//	uint32_t bytesread;
+//    uint8_t str[] = "hello world!";
+//	uint8_t datebuff[1024];
+//    /* Register the file system object to the FatFs module */
+//    if( f_mount(&FatfsUDisk, (TCHAR const*)USBHPath, 0) != FR_OK)
+//    {
+//        Error_Handler(); //FatFs Initialization Error
+//    }
+//    else
+//    {
+//		 if(f_open(&myFile, "APP.bin",  FA_READ) != FR_OK)
 //        {
 //            Error_Handler(); //'STM32.TXT' file Open for write Error
 //        }
-//        else
-//        {
-//            fres = f_write(&myFile, str, sizeof(str), (void *)&byteswrite);
-//            if(byteswrite == 0 || (fres != FR_OK))
-//            {
-//                Error_Handler();
-//            }
-//            else
-//            {
-//                f_close(&myFile); //Close the open text file
-//            }
-//        }
-    }
-}
+//		  else
+//		{
+//			fres = f_read(&myFile, datebuff, 1024, (void *)&bytesread);
+//			for(int i=0;i<1023;i++)
+//			printf("0x%02X ",datebuff[i]);
+//		}
+//		
+//        /* Create and Open a new text file object with write access */
+////        if(f_open(&myFile, "test.txt", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+////        {
+////            Error_Handler(); //'STM32.TXT' file Open for write Error
+////        }
+////        else
+////        {
+////            fres = f_write(&myFile, str, sizeof(str), (void *)&byteswrite);
+////            if(byteswrite == 0 || (fres != FR_OK))
+////            {
+////                Error_Handler();
+////            }
+////            else
+////            {
+////                f_close(&myFile); //Close the open text file
+////            }
+////        }
+//    }
+//}
 
 
 
@@ -167,8 +167,8 @@ int main(void)
    switch(Appli_state)
     {
         case APPLICATION_READY:
-            MSC_Application();
-            Appli_state = APPLICATION_DISCONNECT;
+            Main_Menu();
+			Appli_state = APPLICATION_DISCONNECT;
             break;
         case APPLICATION_DISCONNECT:
             f_mount(NULL, "", 0);

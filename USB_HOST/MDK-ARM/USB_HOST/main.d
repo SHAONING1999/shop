@@ -54,3 +54,5 @@ usb_host\main.o: ../FATFS/Target/usbh_diskio.h
 usb_host\main.o: ../Core/Inc/usart.h
 usb_host\main.o: ../USB_HOST/App/usb_host.h
 usb_host\main.o: ../Core/Inc/gpio.h
+usb_host\main.o: ..\Core\Inc\IAP\menu.h
+usb_host\main.o: ..\Core\Inc\IAP\flash_if.h
