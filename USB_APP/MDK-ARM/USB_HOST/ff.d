@@ -31,6 +31,8 @@ usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h
 usb_host\ff.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
@@ -39,6 +41,20 @@ usb_host\ff.o: ../USB_HOST/Target/usbh_conf.h
 usb_host\ff.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdio.h
 usb_host\ff.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
 usb_host\ff.o: E:\MDK\ARM\ARMCC\Bin\..\include\string.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+usb_host\ff.o: ../Core/Inc/FreeRTOSConfig.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 usb_host\ff.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h
 usb_host\ff.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ioreq.h
 usb_host\ff.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h
@@ -47,5 +63,6 @@ usb_host\ff.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ctlreq.h
 usb_host\ff.o: ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc.h
 usb_host\ff.o: ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_bot.h
 usb_host\ff.o: ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h
+usb_host\ff.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 usb_host\ff.o: ../Middlewares/Third_Party/FatFs/src/diskio.h
 usb_host\ff.o: E:\MDK\ARM\ARMCC\Bin\..\include\stdarg.h

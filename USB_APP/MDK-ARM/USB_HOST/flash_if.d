@@ -1,5 +1,5 @@
 usb_host\flash_if.o: ..\Core\Src\IAP\flash_if.c
-usb_host\flash_if.o: ..\Core\Inc\IAP\flash_if.h
+usb_host\flash_if.o: ../Core/Inc/IAP/flash_if.h
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 usb_host\flash_if.o: ../Core/Inc/stm32f4xx_hal_conf.h
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
@@ -28,6 +28,8 @@ usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h
 usb_host\flash_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
